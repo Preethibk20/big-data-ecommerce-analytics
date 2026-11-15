@@ -1,0 +1,163 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @top-left { content: "Big Data Analytics [BCS714D]"; font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+  @top-right { content: "Assignment 1 — Track B"; font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+  @bottom-center { content: "Department of CSE, JSSATEB  |  Page " counter(page); font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+}
+@page :first {
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+body { font-family: Georgia, "Times New Roman", serif; color: #111827; line-height: 1.55; font-size: 10.5pt; }
+.cover { text-align: center; padding-top: 14mm; }
+.uni { font-size: 14pt; font-weight: bold; letter-spacing: 0.3px; }
+.uni-sub { font-size: 10.5pt; margin-top: 2px; color: #374151; }
+.scheme { font-size: 11pt; font-weight: bold; margin-top: 14mm; }
+.rep-title { font-size: 13.5pt; font-weight: bold; margin-top: 4mm; }
+.on-lbl { font-size: 10.5pt; margin-top: 3mm; }
+.proj-title { font-size: 14pt; font-weight: bold; margin: 4mm auto 0; max-width: 150mm; line-height: 1.35; }
+.sub-title { font-size: 11pt; margin-top: 4mm; color: #1f2937; }
+.cw-note { font-size: 10pt; margin-top: 5mm; color: #374151; }
+.student-tbl { width: 100%; border-collapse: collapse; margin: 9mm auto 5mm; font-size: 10pt; }
+.student-tbl th, .student-tbl td { border: 1px solid #374151; padding: 7px 8px; text-align: left; height: 22px; }
+.student-tbl th { background: #f3f4f6; }
+.meta-line { margin-top: 3mm; font-size: 10.5pt; }
+.dept { margin-top: 14mm; font-weight: bold; font-size: 11pt; }
+.college { margin-top: 2mm; font-weight: bold; font-size: 12pt; }
+.col-addr { font-size: 9.8pt; color: #374151; margin-top: 2px; }
+.acad { margin-top: 4mm; font-size: 10.5pt; }
+.page-break { page-break-before: always; }
+h2 { font-size: 13pt; color: #111827; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-top: 14pt; page-break-after: avoid; font-family: "Segoe UI", Arial, sans-serif; }
+h3 { font-size: 11pt; color: #1f2937; margin-top: 10pt; page-break-after: avoid; font-family: "Segoe UI", Arial, sans-serif; }
+p { margin: 6pt 0; text-align: justify; }
+ul { margin: 6pt 0 8pt 18pt; }
+li { margin: 3pt 0; }
+code { font-family: Consolas, monospace; font-size: 9pt; background: #f3f4f6; padding: 1px 4px; border-radius: 3px; }
+.data-tbl { border-collapse: collapse; width: 100%; margin: 9pt 0; font-size: 9.2pt; page-break-inside: avoid; }
+.data-tbl th, .data-tbl td { border: 1px solid #6b7280; padding: 5px 7px; text-align: left; }
+.data-tbl th { background: #ecfdf5; color: #064e3b; font-family: "Segoe UI", Arial, sans-serif; }
+figure { margin: 10pt 0; text-align: center; page-break-inside: avoid; }
+img { max-width: 100%; max-height: 360px; border: 1px solid #d1d5db; border-radius: 4px; }
+figcaption { font-size: 9.2pt; color: #374151; margin-top: 4px; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 10pt 0; }
+</style></head><body>
+<div class="cover">
+  <div class="uni">VISVESVARAYA TECHNOLOGICAL UNIVERSITY</div>
+  <div class="uni-sub">Jnana Sangama, Machhe, Belagavi – 590018, Karnataka</div>
+  <div class="scheme">2022 SCHEME – BCS714D</div>
+  <div class="rep-title">ASSIGNMENT 1 REPORT</div>
+  <div class="on-lbl">ON</div>
+  <div class="proj-title">Distributed E-Commerce Sales &amp; Merchant Analytics Using MongoDB, Hadoop MapReduce, Pig and Hive</div>
+  <div class="sub-title">Track B – Part 1: Three Core Themes</div>
+  <div class="cw-note">Submitted as part of the coursework for Big Data Analytics</div>
+
+  <table class="student-tbl">
+    <thead>
+      <tr><th>Sl. No.</th><th>Student Name</th><th>USN</th><th>Marks</th><th>Signature</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>2</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="meta-line"><strong>Group No.:</strong> ______ &nbsp;|&nbsp; <strong>Section:</strong> ______</div>
+  <div class="meta-line"><strong>Course Faculty:</strong> ________________________</div>
+
+  <div class="dept">Department of Computer Science and Engineering</div>
+  <div class="college">JSS ACADEMY OF TECHNICAL EDUCATION</div>
+  <div class="col-addr">JSS Campus Road, Dr. Vishnuvardhan Road, Bengaluru – 560060</div>
+  <div class="acad">Academic Year: 2026–2027 (ODD Semester)</div>
+</div>
+<div class="page-break"></div>
+<h2>Contents</h2>
+<table class="data-tbl"><thead><tr><th>Section</th><th>Coverage</th></tr></thead><tbody>
+<tr><td>1. Introduction, Objectives and Dataset</td><td>Olist E-Commerce schema, preparation, validation</td></tr>
+<tr><td>2. Environment and Architecture</td><td>3-node Docker cluster, MongoDB 7.0, processing flow</td></tr>
+<tr><td>3. Cluster Verification</td><td>Live DataNodes, RUNNING NodeManagers, YARN Pi smoke test</td></tr>
+<tr><td>4. MongoDB Ingestion and Linkage</td><td><code>daily_sales</code> & <code>orders_enriched</code> collections and indexes</td></tr>
+<tr><td>5. MongoDB Aggregation and Profiling</td><td><code>$match</code>, <code>$group</code>, <code>$project</code>, <code>$unwind</code>, <code>$facet</code>, <code>IXSCAN</code> vs <code>COLLSCAN</code></td></tr>
+<tr><td>6. HDFS File Management</td><td><code>mkdir</code>, <code>put</code>, <code>cat</code>, <code>get</code>, <code>rm -r</code>, <code>ls -R</code></td></tr>
+<tr><td>7. MapReduce Analytics on YARN</td><td>Python Streaming <code>mapper.py</code> / <code>reducer.py</code> & cross-check</td></tr>
+<tr><td>8. Pig Transformation and Hive Tables</td><td><code>clean_daily.pig</code>, <code>daily_text</code> & Gzip <code>daily_rcfile</code></td></tr>
+<tr><td>9. Hive Performance and Storage Results</td><td>Identical HQL execution time & <code>StorageSummary</code> compression</td></tr>
+<tr><td>10. Conclusion and References</td><td>Key findings & documentation links</td></tr>
+</tbody></table>
+<p>Dataset: Kaggle Brazilian E-Commerce Public Dataset by Olist (<code>brazilian-ecommerce/</code>).</p>
+<div class="page-break"></div>
+<h2>1. Introduction, Objectives and Dataset</h2>
+<p>This project analyses the Kaggle Brazilian E-Commerce Public Dataset by Olist across 2016–2018 using MongoDB, Hadoop MapReduce, Apache Pig, and Apache Hive. Order lifecycle records, item prices, and customer reviews are validated and normalized into daily per-seller transaction summaries (<code>daily.tsv</code>). The interactive Flask dashboard presents the verified analytics as Part 2.</p>
+<table class="data-tbl"><thead><tr><th>Dataset Item</th><th>Raw Input</th><th>Prepared / Analysed Output</th></tr></thead><tbody>
+<tr><td>Orders (<code>olist_orders_dataset.csv</code>)</td><td>99,441 rows</td><td>98,207 valid orders (<code>canceled</code>/<code>unavailable</code> excluded)</td></tr>
+<tr><td>Line Items (<code>olist_order_items_dataset.csv</code>)</td><td>112,650 rows</td><td>112,101 matched valid items</td></tr>
+<tr><td>Daily Seller Grain (<code>daily.tsv</code>)</td><td>—</td><td>69,065 daily rows across 3,053 unique sellers</td></tr>
+<tr><td>Annual Seller Groups</td><td>—</td><td>4,254 <code>(seller_id, year)</code> groups (R$ 13,494,400.74 total)</td></tr>
+</tbody></table>
+<h3>1.1 Selection and Validation Rules</h3>
+<p><code>ecommerce/prepare.py</code> filters out <code>canceled</code> and <code>unavailable</code> orders, validates <code>YYYY-MM-DD</code> purchase timestamps, rejects blank, negative, or non-finite item prices, and writes <code>daily.tsv</code> alongside <code>manifest.json</code> with SHA-256 checksums.</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_tests_and_prepare.png" alt="Unit tests (8/8 OK), data preparation manifest, and local MapReduce cross-check"><figcaption>Figure 1. Unit tests (8/8 OK), data preparation manifest, and local MapReduce cross-check</figcaption></figure>
+<h2>2. Environment and Architecture</h2>
+<p>The distributed stack runs on Docker Desktop using a 3-node cluster (<code>master</code>, <code>worker1</code>, <code>worker2</code>) alongside MongoDB <code>7.0</code> on <code>127.0.0.1:27017</code>.</p>
+<table class="data-tbl"><thead><tr><th>Component</th><th>Configuration</th></tr></thead><tbody>
+<tr><td>Hadoop / Java</td><td>Apache Hadoop <code>2.10.2</code>; OpenJDK <code>1.8.0_504</code></td></tr>
+<tr><td>Analytics Tools</td><td>MongoDB <code>7.0</code>; Apache Pig <code>0.17.0</code>; Apache Hive <code>2.3.9</code></td></tr>
+<tr><td>Master Node</td><td>HDFS NameNode, YARN ResourceManager, JobHistoryServer, HiveServer2</td></tr>
+<tr><td>Worker Nodes</td><td><code>worker1</code> & <code>worker2</code> (2 DataNodes, 2 NodeManagers)</td></tr>
+<tr><td>Storage</td><td>Docker named volumes; HDFS replication factor <code>2</code></td></tr>
+</tbody></table>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/figure1_architecture.png" alt="Dataset processing branches across MongoDB, HDFS/YARN MapReduce, Pig, and Hive"><figcaption>Figure 2. Dataset processing branches across MongoDB, HDFS/YARN MapReduce, Pig, and Hive</figcaption></figure>
+<h2>3. Cluster Verification</h2>
+<p><code>scripts/verify_cluster.sh</code> verified the 3-node cluster prior to running analytics: <strong>2 live DataNodes</strong> (<code>worker1</code> and <code>worker2</code> in <code>Normal</code> status), <strong>2 RUNNING NodeManagers</strong>, <code>Safe mode is OFF</code>, and a YARN MapReduce <code>pi 4 1000</code> smoke test (<code>job_1794418089843_0001</code>) completing in <code>55.974 seconds</code> (<code>Estimated value of Pi is 3.14000000000000000000</code>).</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme2_cluster_verify.png" alt="3-node Hadoop 2.10.2 cluster verification and YARN Pi smoke test"><figcaption>Figure 3. 3-node Hadoop 2.10.2 cluster verification and YARN Pi smoke test</figcaption></figure>
+<h2>4. MongoDB Ingestion and Linkage</h2>
+<p>Implemented in <code>ecommerce/mongo.py</code> (<code>import_and_analyze</code> and <code>_ingest_orders_enriched</code>) against database <code>ecommerce_olist</code>:</p>
+<ul>
+<li><strong><code>daily_sales</code> (69,065 documents):</strong> Batch-inserted daily seller summaries with compound index <code>seller_year</code> (<code>seller_id</code>, <code>year</code>) and single-field index <code>date</code>.</li>
+<li><strong><code>orders_enriched</code> (99,441 documents):</strong> Links each order to its embedded <code>items</code> array and unstructured Portuguese <code>review</code> document (<code>score</code>, <code>comment_title</code>, <code>comment_message</code>), indexed on <code>order_id</code> (unique), <code>items.seller_id + order_status</code>, and <code>review.score</code>.</li>
+</ul>
+<h2>5. MongoDB Aggregation and Profiling</h2>
+<p>Two multi-stage pipelines exercise all five required operators (<code>$match</code>, <code>$group</code>, <code>$project</code>, <code>$unwind</code>, <code>$facet</code>):</p>
+<ul>
+<li><strong><code>build_faceted_pipeline</code> on <code>daily_sales</code>:</strong> Uses <code>$match</code>, <code>$facet</code> (<code>annual_totals</code>, <code>top_sellers</code>, <code>revenue_tiers</code> with <code>$group</code> and <code>$project</code>), and <code>$unwind: "$annual_totals"</code>.</li>
+<li><strong><code>build_order_items_pipeline</code> on <code>orders_enriched</code>:</strong> Uses <code>$match</code>, <code>$unwind: "$items"</code>, and <code>$facet</code> (<code>seller_item_totals</code> and <code>review_score_summary</code>).</li>
+</ul>
+<p><code>ecommerce/mongo_profile.py</code> evaluates index efficiency on <code>daily_sales</code> (<code>seller_id = "4869f7a5dfa277a7dca6462dcf3b52b2"</code>, <code>limit = 100</code>) using <code>.explain("executionStats")</code>:</p>
+<table class="data-tbl"><thead><tr><th>Plan</th><th>Winning Stages</th><th><code>nReturned</code></th><th><code>totalKeysExamined</code></th><th><code>totalDocsExamined</code></th><th><code>executionTimeMillis</code></th></tr></thead><tbody>
+<tr><td>Unindexed (<code>COLLSCAN</code>)</td><td><code>LIMIT -> PROJECTION_SIMPLE -> COLLSCAN</code></td><td>100</td><td>0</td><td>22,973</td><td>17 ms</td></tr>
+<tr><td>Indexed (<code>IXSCAN: seller_year</code>)</td><td><code>LIMIT -> PROJECTION_SIMPLE -> FETCH -> IXSCAN</code></td><td>100</td><td>100</td><td>100</td><td>3 ms</td></tr>
+</tbody></table>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme1_mongodb.png" alt="MongoDB 7.0 ingestion and .explain(&#x27;executionStats&#x27;) output"><figcaption>Figure 4. MongoDB 7.0 ingestion and .explain(&#x27;executionStats&#x27;) output</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_mongodb_index_profiling.png" alt="MongoDB IXSCAN vs COLLSCAN index performance comparison"><figcaption>Figure 5. MongoDB IXSCAN vs COLLSCAN index performance comparison</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_review_score_unwind_facet.png" alt="MongoDB $unwind + $facet order items grouped by customer review score"><figcaption>Figure 6. MongoDB $unwind + $facet order items grouped by customer review score</figcaption></figure>
+<h2>6. HDFS File Management</h2>
+<p>Under <code>/user/root/ecommerce/verify_run_01</code>, <code>scripts/hdfs_demo.sh</code> demonstrated the full HDFS file lifecycle: <code>hdfs dfs -mkdir -p</code> (<code>raw</code>, <code>prepared</code>, <code>demo</code>), <code>hdfs dfs -put</code> (<code>olist_orders_dataset.csv</code> <code>17,654,914</code> B, <code>daily.tsv</code> <code>4,285,661</code> B, <code>manifest.json</code> <code>1,117</code> B), <code>hdfs dfs -cat</code> and <code>hdfs dfs -get</code> with byte-level <code>cmp</code> verification, and <code>hdfs dfs -rm -r</code> on the temporary <code>demo</code> folder followed by <code>hdfs dfs -ls -R</code>.</p>
+<h2>7. MapReduce Analytics on YARN</h2>
+<p><code>scripts/run_mapreduce.sh</code> executed Python Streaming MapReduce (<code>mapreduce/mapper.py</code> + <code>mapreduce/reducer.py</code>) on YARN with 2 reducers (<code>job_1794418089843_0002</code>):</p>
+<ul>
+<li><strong>Map input / output records:</strong> <code>69,065</code></li>
+<li><strong>Reduce input groups / output records:</strong> <code>4,254</code> <code>(seller_id, year)</code> summaries</li>
+<li><strong>HDFS I/O:</strong> <code>4,290,003</code> bytes read / <code>316,212</code> bytes written (<code>_SUCCESS</code> verified)</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme2_hdfs_mapreduce.png" alt="HDFS operations and YARN Python Streaming MapReduce job execution"><figcaption>Figure 7. HDFS operations and YARN Python Streaming MapReduce job execution</figcaption></figure>
+<h2>8. Pig Transformation and Hive Tables</h2>
+<p><code>pig/clean_daily.pig</code> ran in MapReduce mode (<code>Apache Pig 0.17.0</code>, <code>job_1794418089843_0003</code>) to validate <code>YYYY-MM-DD</code> date regex, non-empty <code>seller_id</code>, and non-negative numeric metrics, reading and writing <code>69,065</code> clean rows (<code>4,401,177</code> bytes) in <code>21.381 seconds</code>.</p>
+<p><code>hive/tables.hql</code> created two external tables in <code>ecommerce_analytics</code>: <code>daily_text</code> (<code>STORED AS TEXTFILE</code>) and <code>daily_rcfile</code> (<code>STORED AS RCFILE</code> with <code>GzipCodec</code>), populated via <code>INSERT OVERWRITE TABLE daily_rcfile SELECT ... FROM daily_text</code> and analyzed with <code>COMPUTE STATISTICS</code>.</p>
+<h2>9. Hive Performance and Storage Results</h2>
+<p><code>scripts/benchmark_hive_rcfile.sh</code> executed <code>hive/annual_seller_summary.hql</code> via <code>beeline</code> (<code>jdbc:hive2://localhost:10000</code>) against both tables, verified identical outputs via <code>diff</code> (<code>329,502</code> bytes each, <code>outputs_identical: true</code>), and measured HDFS disk usage via <code>hadoop/StorageSummary.java</code>:</p>
+<table class="data-tbl"><thead><tr><th>Table Format</th><th>Query Execution Time</th><th>Logical Bytes</th><th>Replicated Bytes (RF=2)</th><th>Compression / Savings</th></tr></thead><tbody>
+<tr><td>Standard Text (<code>daily_text</code>)</td><td>56.782 s</td><td>4,401,177 B</td><td>8,802,354 B</td><td>1.000x (Baseline)</td></tr>
+<tr><td>Gzip RCFile (<code>daily_rcfile</code>)</td><td>50.897 s</td><td>937,005 B</td><td>1,874,010 B</td><td><strong>4.697x (78.71% saved)</strong></td></tr>
+</tbody></table>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme3_pig_hive.png" alt="Apache Pig cleaning and Hive TEXTFILE vs RCFile benchmark output"><figcaption>Figure 8. Apache Pig cleaning and Hive TEXTFILE vs RCFile benchmark output</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme3_hive_text_vs_rcfile.png" alt="Hive TEXTFILE vs Gzip RCFile disk footprint and query execution time"><figcaption>Figure 9. Hive TEXTFILE vs Gzip RCFile disk footprint and query execution time</figcaption></figure>
+<h2>10. Conclusion and References</h2>
+<p>All three themes were verified end-to-end on the Olist dataset: MongoDB indexing reduced scanned documents by <strong>229.73x</strong> (<code>22,973</code> → <code>100</code>) with a <strong>5.67x</strong> speedup; YARN Streaming MapReduce matched Python reference totals across all <code>4,254</code> groups; and Gzip RCFile in Hive reduced HDFS storage by <strong>78.71%</strong> (<strong>4.697x</strong> compression) while executing <strong>1.116x</strong> faster with identical query output.</p>
+<p>1. Kaggle Brazilian E-Commerce Public Dataset by Olist — https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce</p>
+<p>2. MongoDB Aggregation Pipeline & Explain Results — https://www.mongodb.com/docs/manual/core/aggregation-pipeline/</p>
+<p>3. Apache Hadoop 2.10.2 Cluster Setup & Streaming — https://hadoop.apache.org/docs/r2.10.2/</p>
+<p>4. Apache Pig 0.17.0 Documentation — https://pig.apache.org/docs/r0.17.0/</p>
+<p>5. Apache Hive Language Manual — https://cwiki.apache.org/confluence/display/Hive/LanguageManual</p></body></html>

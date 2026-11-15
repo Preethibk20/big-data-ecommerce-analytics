@@ -1,0 +1,18 @@
+{
+  "daily_text": {
+    "execution_seconds": 56.782,
+    "logical_bytes": 4401177,
+    "replicated_bytes": 8802354
+  },
+  "daily_rcfile": {
+    "execution_seconds": 50.897,
+    "logical_bytes": 937005,
+    "replicated_bytes": 1874010
+  },
+  "comparison": {
+    "outputs_identical": true,
+    "compression_ratio_text_over_rcfile": 4.697,
+    "space_savings_percent": 78.71,
+    "query_speedup_text_over_rcfile": 1.116
+  }
+}

@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brazilian E-Commerce · Olist Seller Analytics</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: #05603a;
+      --brand-hover: #034428;
+      --brand-light: #e8f5e9;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(5, 96, 58, 0.08), 0 8px 10px -6px rgba(5, 96, 58, 0.04);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background: radial-gradient(circle at 10% 0%, #ecfdf5 0%, #f8fafc 50%, #f1f5f9 100%);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    main {
+      max-width: 1260px;
+      margin: auto;
+      padding: 32px 24px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #05603a 0%, #064e3b 50%, #022c22 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      box-shadow: 0 20px 30px -10px rgba(5, 96, 58, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #fef3c7;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 850;
+      letter-spacing: -1px;
+    }
+
+    header p {
+      margin: 0;
+      color: #d1fae5;
+      font-size: 16px;
+      max-width: 650px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 14px 20px;
+      border-radius: 14px;
+      min-width: 130px;
+      text-align: center;
+    }
+
+    .stat-pill .num {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      display: block;
+    }
+
+    .stat-pill .lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #a7f3d0;
+      letter-spacing: 1px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .nav a {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--line);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--brand);
+      border-color: #a7f3d0;
+      transform: translateY(-1px);
+    }
+
+    .nav a.active {
+      background: var(--brand);
+      color: #ffffff;
+      border-color: var(--brand);
+      box-shadow: 0 8px 16px -4px rgba(5, 96, 58, 0.3);
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      background: #f1f5f9;
+      border: 1px solid var(--line);
+      padding: 18px 20px;
+      border-radius: 14px;
+      margin-bottom: 22px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--brand);
+    }
+
+    input,
+    select {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      font: inherit;
+      color: var(--ink);
+      font-size: 14px;
+      min-width: 200px;
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(5, 96, 58, 0.15);
+    }
+
+    button {
+      padding: 11px 22px;
+      background: var(--brand);
+      color: #ffffff;
+      font: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--brand-hover);
+      transform: translateY(-1px);
+    }
+
+    .quick-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 20px;
+      font-size: 13px;
+    }
+
+    .quick-chips span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .chip {
+      background: #e2e8f0;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .chip:hover {
+      background: var(--brand);
+      color: #ffffff;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .kpi-card {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      border-left: 5px solid var(--brand);
+    }
+
+    .kpi-card.accent {
+      border-left-color: var(--accent);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 850;
+      color: var(--ink);
+      margin: 6px 0 2px;
+    }
+
+    .notice-box {
+      background: var(--brand-light);
+      border: 1px solid #bbf7d0;
+      border-left: 5px solid var(--brand);
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin: 16px 0;
+      color: #065f46;
+      font-size: 14px;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin: 22px 0;
+    }
+
+    .chart-box {
+      background: #fdfdfd;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+
+    .chart-box h3 {
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 750;
+      color: var(--ink);
+    }
+
+    .pie-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin: auto 0;
+      padding: 10px 0;
+    }
+
+    #year-pie {
+      width: 200px;
+      height: 200px;
+      filter: drop-shadow(0 6px 12px rgba(5, 96, 58, 0.12));
+    }
+
+    .legend {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: auto 0;
+      padding: 10px 0;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 110px;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 16px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), #10b981);
+      transition: width 0.4s ease;
+    }
+
+    .bar-row.high .bar-fill {
+      background: linear-gradient(90deg, #d97706, #f59e0b);
+    }
+
+    .bar-row.low .bar-fill {
+      background: linear-gradient(90deg, #64748b, #94a3b8);
+    }
+
+    .table-card {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    th,
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    th:first-child,
+    td:first-child,
+    th:nth-child(2),
+    td:nth-child(2) {
+      text-align: left;
+    }
+
+    thead {
+      background: #064e3b;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    tbody tr:hover {
+      background: #f1f5f9;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 12px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .rank-1 {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .rank-2 {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .rank-3 {
+      background: #ffedd5;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    .seller-link {
+      color: var(--brand);
+      text-decoration: none;
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .seller-link:hover {
+      text-decoration: underline;
+      color: var(--brand-hover);
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+      }
+
+      .hero-stats {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="hero-badge">🇧🇷 Big Data Analytics · Olist E-Commerce</div>
+        <h1>Seller Analytics Engine</h1>
+        <p>Explore merchant performance, track multi-year revenue trends, and evaluate seller rankings across 2016–2018.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="num">{{ "{:,}".format(data.sellers) }}</span>
+          <span class="lbl">Sellers</span>
+        </div>
+        <div class="stat-pill">
+          <span class="num">{{ "{:,}".format(data.total_orders) }}</span>
+          <span class="lbl">Items Sold</span>
+        </div>
+        <div class="stat-pill">
+          <span class="num">R$ {{ "{:,.0f}".format(data.total_revenue_brl) }}</span>
+          <span class="lbl">Revenue</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Dashboard views">
+      <a href="{{ url_for('home', page='seller') }}" class="{% if page == 'seller' %}active{% endif %}">
+        📊 1 · Seller Multi-Year Performance
+      </a>
+      <a href="{{ url_for('home', page='year', year=selected_year) }}" class="{% if page == 'year' %}active{% endif %}">
+        🏆 2 · Annual Seller Rankings
+      </a>
+    </nav>
+
+    {% if page == 'seller' %}
+    <section>
+      <h2>Seller Multi-Year Profile</h2>
+      <div class="subtitle">Search by full 32-character seller ID or initial prefix to inspect annual revenue, order
+        volumes, and daily metrics.</div>
+
+      <form method="get" action="{{ url_for('home') }}">
+        <input type="hidden" name="page" value="seller">
+        <div class="form-group">
+          <label for="seller-id-input">Seller ID / Prefix</label>
+          <input id="seller-id-input" name="seller_id" value="{{ seller_id }}" placeholder="e.g. 53243585... or full ID"
+            required>
+        </div>
+        <div class="form-group">
+          <label for="pie-metric-select">Pie Chart Metric</label>
+          <select id="pie-metric-select" name="pie_metric">
+            {% for key, metric in metrics.items() %}
+            <option value="{{ key }}" {% if key==pie_metric %}selected{% endif %}>{{ metric.label }} ({{ metric.unit }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit">Inspect Seller</button>
+      </form>
+
+      {% if top_seller_ids %}
+      <div class="quick-chips">
+        <span>Quick Select Top Sellers:</span>
+        {% for tid in top_seller_ids %}
+        <a href="{{ url_for('home', page='seller', seller_id=tid, pie_metric=pie_metric) }}" class="chip">{{ tid[:8]
+          }}...</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if seller %}
+      {% set total_rev = seller.records | map(attribute='revenue_brl') | sum %}
+      {% set total_ords = seller.records | map(attribute='orders') | sum %}
+      {% set total_days = seller.records | map(attribute='days') | sum %}
+      {% set peak_item = seller.records | map(attribute='peak_order_brl') | max %}
+      {% set max_rev_rec = seller.records | map(attribute='revenue_brl') | max %}
+
+      <div class="notice-box">
+        Seller <strong>{{ seller.seller_id }}</strong> recorded its highest revenue in <strong>{{ seller.highest_year
+          }}</strong> and lowest in <strong>{{ seller.lowest_year }}</strong> across available operating years.
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Cumulative Revenue</div>
+          <div class="kpi-value">R$ {{ "{:,.2f}".format(total_rev) }}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Total Items Sold</div>
+          <div class="kpi-value">{{ "{:,}".format(total_ords) }}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Active Selling Days</div>
+          <div class="kpi-value">{{ "{:,}".format(total_days) }}</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Peak Item Price</div>
+          <div class="kpi-value">R$ {{ "{:,.2f}".format(peak_item) }}</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h3>Annual Share · {{ metrics[pie_metric].label }}</h3>
+          <div class="pie-wrap">
+            <svg id="year-pie" viewBox="0 0 200 200" role="img"
+              aria-label="Pie chart showing yearly breakdown of {{ metrics[pie_metric].label }}"></svg>
+            <ul id="year-legend" class="legend"></ul>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <h3>Annual Revenue Progression (R$)</h3>
+          <div class="bar-list">
+            {% for row in seller.records %}
+            <div
+              class="bar-row {% if row.year == seller.highest_year %}high{% elif row.year == seller.lowest_year %}low{% endif %}">
+              <strong>{{ row.year }}</strong>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: {{ (row.revenue_brl / max_rev_rec * 100) if max_rev_rec else 0 }}%">
+                </div>
+              </div>
+              <span style="font-weight:700">R$ {{ "{:,.2f}".format(row.revenue_brl) }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <h3>Detailed Annual Seller Breakdown</h3>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Active Days</th>
+              <th>Items Sold</th>
+              <th>Total Revenue</th>
+              <th>Mean Daily Rev</th>
+              <th>Max Daily Rev</th>
+              <th>Peak Item Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in seller.records %}
+            <tr>
+              <td><strong>{{ row.year }}</strong></td>
+              <td>{{ row.days }}</td>
+              <td>{{ "{:,}".format(row.orders) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.revenue_brl) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.mean_daily_revenue) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.max_daily_revenue) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.peak_order_brl) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <script type="application/json" id="pie-chart-data">
+        {
+          "values": {{ seller.records | map(attribute=pie_metric) | list | tojson }},
+          "years": {{ seller.records | map(attribute='year') | list | tojson }},
+          "metricUnit": {{ metrics[pie_metric].unit | tojson }}
+        }
+      </script>
+      <script>
+        (() => {
+          const dataNode = document.getElementById('pie-chart-data');
+          if (!dataNode) return;
+          const chartData = JSON.parse(dataNode.textContent || '{}');
+          const values = chartData.values || [];
+          const years = chartData.years || [];
+          const metricUnit = chartData.metricUnit || '';
+          const colors = ['#05603a', '#d97706', '#0ea5e9', '#8b5cf6', '#ec4899'];
+          const svg = document.getElementById('year-pie');
+          const legend = document.getElementById('year-legend');
+          const total = values.reduce((sum, v) => sum + v, 0);
+
+          if (!total || values.length === 0) {
+            const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            txt.setAttribute('x', '100');
+            txt.setAttribute('y', '105');
+            txt.setAttribute('text-anchor', 'middle');
+            txt.setAttribute('fill', '#94a3b8');
+            txt.textContent = 'No data';
+            svg.appendChild(txt);
+            return;
+          }
+
+          let angle = -Math.PI / 2;
+          values.forEach((val, idx) => {
+            const next = angle + (val / total) * Math.PI * 2;
+            const x1 = 100 + 85 * Math.cos(angle);
+            const y1 = 100 + 85 * Math.sin(angle);
+            const x2 = 100 + 85 * Math.cos(next);
+            const y2 = 100 + 85 * Math.sin(next);
+            const largeArc = (next - angle) > Math.PI ? 1 : 0;
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M 100 100 L ${x1} ${y1} A 85 85 0 ${largeArc} 1 ${x2} ${y2} Z`);
+            path.setAttribute('fill', colors[idx % colors.length]);
+            svg.appendChild(path);
+
+            const li = document.createElement('li');
+            li.className = 'legend-item';
+            const dot = document.createElement('span');
+            dot.className = 'legend-dot';
+            dot.style.background = colors[idx % colors.length];
+            const pct = ((val / total) * 100).toFixed(1);
+            li.append(dot, document.createTextNode(`${years[idx]}: ${pct}% (${val.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metricUnit})`));
+            legend.appendChild(li);
+            angle = next;
+          });
+        })();
+      </script>
+      {% elif seller_id %}
+      <div class="notice-box" style="background:#fef2f2; border-color:#f87171; color:#991b1b;">
+        No records found matching seller ID or prefix <strong>{{ seller_id }}</strong>. Please try one of the quick
+        select links above.
+      </div>
+      {% endif %}
+    </section>
+
+    {% else %}
+    <section>
+      <h2>Annual Seller Leaderboard</h2>
+      <div class="subtitle">Rank all merchants by selected business metric for any active year (2016–2018).</div>
+
+      <form method="get" action="{{ url_for('home') }}">
+        <input type="hidden" name="page" value="year">
+        <div class="form-group">
+          <label for="year-select">Select Year</label>
+          <select id="year-select" name="year">
+            {% for y in years %}
+            <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="rank-metric-select">Ranking Metric</label>
+          <select id="rank-metric-select" name="metric">
+            {% for key, metric in metrics.items() %}
+            <option value="{{ key }}" {% if key==rank_metric %}selected{% endif %}>{{ metric.label }} ({{ metric.unit
+              }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="top-k-input">Top K Sellers</label>
+          <input id="top-k-input" name="top_k" type="number" min="1" max="{{ data.sellers }}" value="{{ top_k }}"
+            required>
+        </div>
+        <button type="submit">Show Leaderboard</button>
+      </form>
+
+      {% if ranking and ranking.most and ranking.least %}
+      <div class="kpi-grid">
+        <div class="kpi-card" style="border-left-color: #f59e0b;">
+          <div class="kpi-label">🥇 Highest {{ metrics[rank_metric].label }} · {{ selected_year }}</div>
+          <div class="kpi-value" style="font-size: 20px;">
+            <a class="seller-link" href="{{ url_for('home', page='seller', seller_id=ranking.most.seller_id) }}">{{
+              ranking.most.seller_id }}</a>
+          </div>
+          <div style="font-weight:700; color:var(--brand); margin-top:4px;">
+            {{ "{:,.2f}".format(ranking.most[rank_metric]) }} {{ metrics[rank_metric].unit }}
+          </div>
+        </div>
+
+        <div class="kpi-card" style="border-left-color: #64748b;">
+          <div class="kpi-label">Lowest {{ metrics[rank_metric].label }} · {{ selected_year }}</div>
+          <div class="kpi-value" style="font-size: 20px;">
+            <a class="seller-link" href="{{ url_for('home', page='seller', seller_id=ranking.least.seller_id) }}">{{
+              ranking.least.seller_id }}</a>
+          </div>
+          <div style="font-weight:700; color:var(--muted); margin-top:4px;">
+            {{ "{:,.2f}".format(ranking.least[rank_metric]) }} {{ metrics[rank_metric].unit }}
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Seller ID</th>
+              <th>Active Days</th>
+              <th>Items Sold</th>
+              <th>Total Revenue</th>
+              <th>Mean Daily Rev</th>
+              <th>Max Daily Rev</th>
+              <th>Peak Item Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in ranking.sellers %}
+            <tr>
+              <td>
+                <span
+                  class="rank-badge {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% endif %}">
+                  {{ loop.index }}
+                </span>
+              </td>
+              <td>
+                <a class="seller-link" href="{{ url_for('home', page='seller', seller_id=row.seller_id) }}"
+                  title="Click to inspect this seller">
+                  {{ row.seller_id }}
+                </a>
+              </td>
+              <td>{{ row.days }}</td>
+              <td>{{ "{:,}".format(row.orders) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.revenue_brl) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.mean_daily_revenue) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.max_daily_revenue) }}</td>
+              <td>R$ {{ "{:,.2f}".format(row.peak_order_brl) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="notice-box" style="background:#fef2f2; border-color:#f87171; color:#991b1b;">
+        No seller activity recorded for year {{ selected_year }}.
+      </div>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <footer>
+      Big Data Analytics Coursework · Brazilian E-Commerce Public Dataset by Olist (Kaggle) · Powered by Hadoop
+      MapReduce, Pig, Hive & MongoDB
+    </footer>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page { size: A4; margin: 14mm; }
+body { font-family: "Segoe UI", Arial, sans-serif; color: #1f2937; line-height: 1.5; font-size: 10.5pt; max-width: 960px; margin: 0 auto; }
+h1 { color: #0f4c3a; border-bottom: 2px solid #0f4c3a; padding-bottom: 6px; font-size: 18pt; }
+h2 { color: #14532d; margin-top: 20px; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; font-size: 13.5pt; page-break-after: avoid; }
+h3 { color: #1e3a5f; margin-top: 12px; font-size: 11pt; page-break-after: avoid; }
+code { background: #f3f4f6; padding: 1px 4px; border-radius: 3px; font-family: Consolas, monospace; font-size: 9pt; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 9.2pt; page-break-inside: avoid; }
+th, td { border: 1px solid #d1d5db; padding: 6px 8px; text-align: left; }
+th { background: #ecfdf5; color: #064e3b; }
+figure { margin: 12px 0; text-align: center; page-break-inside: avoid; }
+img { max-width: 100%; max-height: 430px; border: 1px solid #d1d5db; border-radius: 6px; }
+figcaption { font-size: 8.8pt; color: #4b5563; margin-top: 4px; font-style: italic; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 14px 0; }
+</style></head><body><h1>Big Data Analytics Report: Brazilian E-Commerce (Olist) Multi-System Pipeline</h1>
+<p><strong>Dataset:</strong> Kaggle Brazilian E-Commerce Public Dataset by Olist (<code>brazilian-ecommerce/</code>)</p>
+<p><strong>Scope:</strong> 98,207 valid orders · 112,101 matched line items · 69,065 daily seller summaries · 3,053 unique merchants (<code>2016-09-04</code> to <code>2018-09-03</code>) · R$ 13,494,400.74 total sales</p>
+<hr>
+<h2>1. System Architecture & Data Preparation</h2>
+<p>Raw relational CSVs (<code>olist_orders_dataset.csv</code>, <code>olist_order_items_dataset.csv</code>, <code>olist_order_reviews_dataset.csv</code>) are validated and normalized into daily per-seller records (<code>daily.tsv</code> + <code>manifest.json</code>) by <code>ecommerce/prepare.py</code>. Orders marked <code>canceled</code> or <code>unavailable</code> are excluded, and non-finite or negative item prices are rejected.</p>
+<ul>
+<li><strong>Automated Verification (<code>unittest</code>):</strong> All <strong>8/8</strong> unit and mock integration tests pass in <code>0.397s</code>.</li>
+<li><strong>MapReduce Cross-Check (<code>ecommerce/analytics.py</code>):</strong> Executing <code>mapreduce/mapper.py</code> and <code>mapreduce/reducer.py</code> locally produces <strong>4,254</strong> <code>(seller_id, year)</code> groups matching pure Python reference summaries with <code>mapreduce_crosscheck: "passed"</code>.</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_tests_and_prepare.png" alt="Unit Tests, Data Preparation, and MapReduce Cross-Check"><figcaption>Unit Tests, Data Preparation, and MapReduce Cross-Check</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/olist_annual_growth_and_top_sellers.png" alt="Olist Multi-Year Marketplace Growth, Top Sellers, and Revenue Tiers"><figcaption>Olist Multi-Year Marketplace Growth, Top Sellers, and Revenue Tiers</figcaption></figure>
+<hr>
+<h2>2. Assignment Theme 1 — MongoDB Big Data Processing & Analytics</h2>
+<h3>2.1 Document Data Ingestion & Indexing</h3>
+<p>Implemented in <code>ecommerce/mongo.py</code> (<code>import_and_analyze</code> and <code>_ingest_orders_enriched</code>) and executed against <strong>MongoDB 7.0</strong> (<code>ecommerce_olist</code> database):</p>
+<ul>
+<li><strong><code>daily_sales</code> collection (69,065 documents):</strong> Batch-inserted daily seller summaries with compound index <code>seller_year</code> (<code>{"seller_id": 1, "year": 1}</code>) and single-field index <code>date</code> (<code>{"date": 1}</code>).</li>
+<li><strong><code>orders_enriched</code> collection (99,441 documents):</strong> Stores structured order metadata, embedded <code>items</code> arrays, and unstructured Portuguese <code>review</code> text (<code>comment_title</code>, <code>comment_message</code>, <code>score</code>), indexed on <code>order_id</code> (unique), <code>items.seller_id + order_status</code>, and <code>review.score</code>.</li>
+</ul>
+<h3>2.2 Aggregation Pipelines (<code>$match</code>, <code>$group</code>, <code>$project</code>, <code>$unwind</code>, <code>$facet</code>)</h3>
+<ul>
+<li><strong><code>build_faceted_pipeline</code> on <code>daily_sales</code>:</strong> Filters years (<code>$match</code>), fans out via <code>$facet</code> into <code>annual_totals</code>, <code>top_sellers</code>, and <code>revenue_tiers</code> (<code>$group</code> + <code>$project</code>), then flattens annual buckets via <code>$unwind: "$annual_totals"</code> and <code>$project</code>.</li>
+<li><strong><code>build_order_items_pipeline</code> on <code>orders_enriched</code>:</strong> Filters fulfilled orders (<code>$match</code>), unpacks embedded order line items via <code>$unwind: "$items"</code>, and branches via <code>$facet</code> into <code>seller_item_totals</code> and <code>review_score_summary</code>.</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_review_score_unwind_facet.png" alt="MongoDB $unwind and $facet Order Items by Review Score"><figcaption>MongoDB $unwind and $facet Order Items by Review Score</figcaption></figure>
+<h3>2.3 Query Performance Profiling (<code>.explain("executionStats")</code>)</h3>
+<p>Implemented in <code>ecommerce/mongo_profile.py</code> (<code>profile_database</code>), comparing the same seller lookup (<code>seller_id = "4869f7a5dfa277a7dca6462dcf3b52b2"</code>, <code>limit = 100</code>) with and without the <code>seller_year</code> compound index:</p>
+<table><thead><tr><th>Execution Plan</th><th>Winning Stages</th><th><code>nReturned</code></th><th><code>totalKeysExamined</code></th><th><code>totalDocsExamined</code></th><th><code>executionTimeMillis</code></th></tr></thead><tbody>
+<tr><td><strong>Unindexed (<code>hint: {$natural: 1}</code>)</strong></td><td><code>LIMIT -> PROJECTION_SIMPLE -> COLLSCAN</code></td><td>100</td><td>0</td><td>22,973</td><td>17 ms</td></tr>
+<tr><td><strong>Indexed (<code>seller_year</code>)</strong></td><td><code>LIMIT -> PROJECTION_SIMPLE -> FETCH -> IXSCAN</code></td><td>100</td><td>100</td><td>100</td><td>3 ms</td></tr>
+</tbody></table>
+<ul>
+<li><strong>Result:</strong> The compound index achieves a <strong>229.73x reduction</strong> in scanned documents and a <strong>5.67x execution speedup</strong>.</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme1_mongodb.png" alt="MongoDB Ingestion and .explain(&#x27;executionStats&#x27;) Terminal Evidence"><figcaption>MongoDB Ingestion and .explain(&#x27;executionStats&#x27;) Terminal Evidence</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_mongodb_index_profiling.png" alt="MongoDB Index Performance Comparison Chart"><figcaption>MongoDB Index Performance Comparison Chart</figcaption></figure>
+<hr>
+<h2>3. Assignment Theme 2 — Hadoop File Management & MapReduce Analytics</h2>
+<h3>3.1 Distributed Cluster & HDFS Operations</h3>
+<p>A 3-node Docker cluster (<code>master</code>, <code>worker1</code>, <code>worker2</code> running Hadoop <code>2.10.2</code>) was verified with <code>scripts/verify_cluster.sh</code>: <strong>2 live DataNodes</strong>, <strong>2 RUNNING NodeManagers</strong>, <code>dfs.replication = 2</code>, and YARN <code>pi 4 1000</code> completing in <strong>55.974s</strong>.</p>
+<p><code>scripts/hdfs_demo.sh</code> executed the full HDFS lifecycle under <code>/user/root/ecommerce/verify_run_01</code>:</p>
+<ul>
+<li><code>hdfs dfs -mkdir -p</code> (<code>raw</code>, <code>prepared</code>, <code>demo</code>)</li>
+<li><code>hdfs dfs -put</code> (<code>olist_orders_dataset.csv</code> — 17,654,914 bytes; <code>daily.tsv</code> — 4,285,661 bytes; <code>manifest.json</code> — 1,117 bytes)</li>
+<li><code>hdfs dfs -cat</code> and <code>hdfs dfs -get</code> + byte-level <code>cmp</code> verification on <code>probe.txt</code></li>
+<li><code>hdfs dfs -rm -r</code> on the temporary <code>demo</code> directory and <code>hdfs dfs -ls -R</code></li>
+</ul>
+<h3>3.2 YARN Python Streaming MapReduce</h3>
+<p><code>scripts/run_mapreduce.sh</code> executed <code>mapreduce/mapper.py</code> and <code>mapreduce/reducer.py</code> on YARN (<code>job_1794418089843_0002</code>, 2 reducers):</p>
+<ul>
+<li><strong>Map input / output records:</strong> <code>69,065</code></li>
+<li><strong>Reduce input groups / output records:</strong> <code>4,254</code> <code>(seller_id, year)</code> summaries</li>
+<li><strong>HDFS bytes read / written:</strong> <code>4,290,003</code> bytes read / <code>316,212</code> bytes written</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme2_hdfs_mapreduce.png" alt="Theme 2: HDFS File Management and YARN MapReduce Execution"><figcaption>Theme 2: HDFS File Management and YARN MapReduce Execution</figcaption></figure>
+<hr>
+<h2>4. Assignment Theme 3 — Pig Latin & Hive RCFile Performance Analytics</h2>
+<h3>4.1 Data Transformation in Apache Pig</h3>
+<p><code>pig/clean_daily.pig</code> ran in MapReduce mode (<code>Apache Pig 0.17.0</code>, <code>job_1794418089843_0003</code>) to validate <code>YYYY-MM-DD</code> date format, non-empty <code>seller_id</code>, and non-negative numerical metrics:</p>
+<ul>
+<li><strong>Records read / stored:</strong> <code>69,065</code> / <code>69,065</code> (<code>4,401,177</code> bytes written to <code>/user/root/ecommerce/verify_run_01/clean</code>)</li>
+<li><strong>Pig execution time:</strong> <code>21.381 seconds</code> (<code>MAP_ONLY</code>)</li>
+</ul>
+<h3>4.2 Hive Text vs Compressed RCFile Benchmark</h3>
+<p><code>scripts/benchmark_hive_rcfile.sh</code> created external <code>daily_text</code> (<code>TEXTFILE</code>) and Gzip-compressed <code>daily_rcfile</code> (<code>RCFILE</code> + <code>GzipCodec</code>) tables via <code>hive/tables.hql</code>, executed the identical analytical query <code>hive/annual_seller_summary.hql</code> via <code>beeline</code> against <code>HiveServer2</code>, verified output equivalence with <code>diff</code> (<code>329,502</code> bytes each, <code>outputs_identical: true</code>), and measured HDFS byte footprints using <code>hadoop/StorageSummary.java</code>:</p>
+<table><thead><tr><th>Hive Table Format</th><th>Query Execution Time</th><th>Logical HDFS Size</th><th>Replicated HDFS Size (RF=2)</th><th>Compression / Savings</th></tr></thead><tbody>
+<tr><td><strong>Standard Text (<code>daily_text</code>)</strong></td><td>56.782 s</td><td>4,401,177 B (4,298.0 KB)</td><td>8,802,354 B</td><td>Baseline (1.000x)</td></tr>
+<tr><td><strong>Gzip RCFile (<code>daily_rcfile</code>)</strong></td><td>50.897 s</td><td>937,005 B (915.0 KB)</td><td>1,874,010 B</td><td><strong>4.697x compression (78.71% saved)</strong></td></tr>
+</tbody></table>
+<ul>
+<li><strong>Query speedup:</strong> <code>daily_rcfile</code> completed the identical aggregation <strong>1.116x faster</strong> (<code>50.897s</code> vs <code>56.782s</code>) while reducing HDFS disk usage by <strong>78.71%</strong>.</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/screenshot_theme3_pig_hive.png" alt="Theme 3: Apache Pig and Hive Text vs RCFile Terminal Output"><figcaption>Theme 3: Apache Pig and Hive Text vs RCFile Terminal Output</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme3_hive_text_vs_rcfile.png" alt="Theme 3: Hive TEXTFILE vs Gzip RCFile Storage and Query Benchmark Chart"><figcaption>Theme 3: Hive TEXTFILE vs Gzip RCFile Storage and Query Benchmark Chart</figcaption></figure>
+<hr>
+<h2>5. Interactive Analytics Dashboard</h2>
+<p>The Flask application (<code>ecommerce/dashboard.py</code>) serves the validated analytical outputs across two interactive views:</p>
+<p>1. <strong>Page 1 — Seller Multi-Year Performance:</strong> Seller lookup (<code>4869f7a5dfa277a7dca6462dcf3b52b2</code>: R$ 229,237.63 cumulative revenue, 1,155 items sold, 358 active days, R$ 899.99 peak item price), dynamic SVG pie share, and annual revenue progression bars.</p>
+<p>2. <strong>Page 2 — Annual Seller Leaderboard:</strong> Year-filtered ranking (2018 Top 10 by Total Revenue), highlighting highest (<code>4869f7a5dfa277a7dca6462dcf3b52b2</code>, R$ 138,414.60) and lowest (<code>dd533b429f380718b70ad9922c294bae</code>, R$ 4.99) merchants.</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/dashboard_page1_seller.png" alt="Flask Dashboard Page 1: Seller Multi-Year Performance"><figcaption>Flask Dashboard Page 1: Seller Multi-Year Performance</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/dashboard_page2_leaderboard.png" alt="Flask Dashboard Page 2: 2018 Annual Seller Leaderboard"><figcaption>Flask Dashboard Page 2: 2018 Annual Seller Leaderboard</figcaption></figure></body></html>

@@ -1,0 +1,126 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @top-left { content: "Big Data Analytics [BCS714D]"; font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+  @top-right { content: "Assignment 2 — Track B"; font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+  @bottom-center { content: "Department of CSE, JSSATEB  |  Page " counter(page); font-size: 9pt; color: #4b5563; font-family: Georgia, serif; }
+}
+@page :first {
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+body { font-family: Georgia, "Times New Roman", serif; color: #111827; line-height: 1.55; font-size: 10.5pt; }
+.cover { text-align: center; padding-top: 14mm; }
+.uni { font-size: 14pt; font-weight: bold; letter-spacing: 0.3px; }
+.uni-sub { font-size: 10.5pt; margin-top: 2px; color: #374151; }
+.scheme { font-size: 11pt; font-weight: bold; margin-top: 14mm; }
+.rep-title { font-size: 13.5pt; font-weight: bold; margin-top: 4mm; }
+.on-lbl { font-size: 10.5pt; margin-top: 3mm; }
+.proj-title { font-size: 14pt; font-weight: bold; margin: 4mm auto 0; max-width: 150mm; line-height: 1.35; }
+.sub-title { font-size: 11pt; margin-top: 4mm; color: #1f2937; }
+.cw-note { font-size: 10pt; margin-top: 5mm; color: #374151; }
+.student-tbl { width: 100%; border-collapse: collapse; margin: 9mm auto 5mm; font-size: 10pt; }
+.student-tbl th, .student-tbl td { border: 1px solid #374151; padding: 7px 8px; text-align: left; height: 22px; }
+.student-tbl th { background: #f3f4f6; }
+.meta-line { margin-top: 3mm; font-size: 10.5pt; }
+.dept { margin-top: 14mm; font-weight: bold; font-size: 11pt; }
+.college { margin-top: 2mm; font-weight: bold; font-size: 12pt; }
+.col-addr { font-size: 9.8pt; color: #374151; margin-top: 2px; }
+.acad { margin-top: 4mm; font-size: 10.5pt; }
+.page-break { page-break-before: always; }
+h2 { font-size: 13pt; color: #111827; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-top: 14pt; page-break-after: avoid; font-family: "Segoe UI", Arial, sans-serif; }
+h3 { font-size: 11pt; color: #1f2937; margin-top: 10pt; page-break-after: avoid; font-family: "Segoe UI", Arial, sans-serif; }
+p { margin: 6pt 0; text-align: justify; }
+ul { margin: 6pt 0 8pt 18pt; }
+li { margin: 3pt 0; }
+code { font-family: Consolas, monospace; font-size: 9pt; background: #f3f4f6; padding: 1px 4px; border-radius: 3px; }
+.data-tbl { border-collapse: collapse; width: 100%; margin: 9pt 0; font-size: 9.2pt; page-break-inside: avoid; }
+.data-tbl th, .data-tbl td { border: 1px solid #6b7280; padding: 5px 7px; text-align: left; }
+.data-tbl th { background: #ecfdf5; color: #064e3b; font-family: "Segoe UI", Arial, sans-serif; }
+figure { margin: 10pt 0; text-align: center; page-break-inside: avoid; }
+img { max-width: 100%; max-height: 360px; border: 1px solid #d1d5db; border-radius: 4px; }
+figcaption { font-size: 9.2pt; color: #374151; margin-top: 4px; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 10pt 0; }
+</style></head><body>
+<div class="cover">
+  <div class="uni">VISVESVARAYA TECHNOLOGICAL UNIVERSITY</div>
+  <div class="uni-sub">Jnana Sangama, Machhe, Belagavi – 590018, Karnataka</div>
+  <div class="scheme">2022 SCHEME – BCS714D</div>
+  <div class="rep-title">ASSIGNMENT 2 REPORT</div>
+  <div class="on-lbl">ON</div>
+  <div class="proj-title">Seller Analytics Engine: A Flask Dashboard for Olist E-Commerce Big Data Analytics</div>
+  <div class="sub-title">Track B – Part 2: Web Dashboard and Visualisation</div>
+  <div class="cw-note">Submitted as part of the coursework for Big Data Analytics</div>
+
+  <table class="student-tbl">
+    <thead>
+      <tr><th>Sl. No.</th><th>Student Name</th><th>USN</th><th>Marks</th><th>Signature</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>2</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="meta-line"><strong>Group No.:</strong> ______ &nbsp;|&nbsp; <strong>Section:</strong> ______</div>
+  <div class="meta-line"><strong>Course Faculty:</strong> ________________________</div>
+
+  <div class="dept">Department of Computer Science and Engineering</div>
+  <div class="college">JSS ACADEMY OF TECHNICAL EDUCATION</div>
+  <div class="col-addr">JSS Campus Road, Dr. Vishnuvardhan Road, Bengaluru – 560060</div>
+  <div class="acad">Academic Year: 2026–2027 (ODD Semester)</div>
+</div>
+<div class="page-break"></div>
+<h2>Contents</h2>
+<table class="data-tbl"><thead><tr><th>Section</th><th>Coverage</th></tr></thead><tbody>
+<tr><td>1. Introduction and Dataset</td><td>Flask Seller Analytics Engine & Olist multi-year scope</td></tr>
+<tr><td>2. Dashboard Architecture</td><td>Read-only Flask serving model, endpoints & validation</td></tr>
+<tr><td>3. Seller Multi-Year Performance (Page 1)</td><td>Merchant lookup, SVG pie shares & annual progression bars</td></tr>
+<tr><td>4. Annual Seller Leaderboard (Page 2)</td><td>Year/metric ranking, tie-breaking & top/bottom cards</td></tr>
+<tr><td>5. Cross-System Result Presentation</td><td>Marketplace growth, revenue tiers & <code>$unwind</code> review analytics</td></tr>
+<tr><td>6. Performance Evaluation</td><td>MongoDB index speedup & Hive RCFile compression findings</td></tr>
+<tr><td>7. Conclusion and References</td><td>Summary & documentation links</td></tr>
+</tbody></table>
+<p>Dataset: Kaggle Brazilian E-Commerce Public Dataset by Olist (<code>brazilian-ecommerce/</code>).</p>
+<div class="page-break"></div>
+<h2>1. Introduction and Dataset</h2>
+<p>The Seller Analytics Engine is the Track B Part 2 web dashboard built with <strong>Flask 3.1.2</strong>, Python, Jinja2 HTML templates, CSS, and inline SVG charts. It serves verified analytical artifacts produced by the Part 1 ingestion, MapReduce, MongoDB, Pig, and Hive pipelines across <strong>98,207</strong> valid orders, <strong>112,101</strong> line items, <strong>69,065</strong> daily records, and <strong>3,053</strong> unique merchants (<code>2016–2018</code>, <strong>R$ 13,494,401</strong> total revenue).</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/dashboard_page1_seller.png" alt="Flask Dashboard Page 1: Seller Multi-Year Performance overview"><figcaption>Figure 1. Flask Dashboard Page 1: Seller Multi-Year Performance overview</figcaption></figure>
+<h2>2. Dashboard Architecture</h2>
+<p><code>ecommerce/dashboard.py</code> (<code>create_app</code>) loads saved JSON results once in read-only mode so heavy distributed computation remains decoupled from interactive web serving. Input validation enforces valid page names, operating years (<code>2016–2018</code>), metric keys, and integer <code>top_k</code> bounds (<code>1</code> to <code>3,053</code>), returning HTTP <code>400</code> on invalid query parameters and a clean notice on unmatched seller IDs.</p>
+<table class="data-tbl"><thead><tr><th>Route / Query Parameter</th><th>Function</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>GET /</code> (<code>page=seller</code>, default)</td><td><code>seller_year_view()</code></td><td>Exact or prefix seller lookup, SVG pie shares, annual breakdown</td></tr>
+<tr><td><code>GET /?page=year&year=...&metric=...&top_k=...</code></td><td><code>year_seller_ranking()</code></td><td>Ranked annual leaderboard with deterministic <code>(-metric, seller_id)</code> tie-break</td></tr>
+<tr><td><code>pie_metric</code> / <code>metric</code></td><td><code>METRICS</code> mapping</td><td>Switches between Revenue, Orders, Mean Daily Rev, Max Daily Rev, Peak Order</td></tr>
+</tbody></table>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/figure2_dashboard_arch.png" alt="Flask dashboard serving architecture and upstream evidence flow"><figcaption>Figure 2. Flask dashboard serving architecture and upstream evidence flow</figcaption></figure>
+<h2>3. Seller Multi-Year Performance (Page 1)</h2>
+<p>Page 1 lets evaluators look up any merchant by full 32-character hex ID or initial prefix (with quick-select chips for top merchants). For top merchant <code>4869f7a5dfa277a7dca6462dcf3b52b2</code>:</p>
+<ul>
+<li><strong>Cumulative Revenue:</strong> <code>R$ 229,237.63</code> across <code>1,155</code> items sold and <code>358</code> active days (<code>Peak Item Price: R$ 899.99</code>).</li>
+<li><strong>Annual Share & Progression:</strong> <code>2017</code> contributed <code>39.6%</code> (<code>R$ 90,823.03</code>) while <code>2018</code> contributed <code>60.4%</code> (<code>R$ 138,414.60</code>).</li>
+</ul>
+<h2>4. Annual Seller Leaderboard (Page 2)</h2>
+<p>Page 2 ranks all merchants operating in a chosen calendar year (<code>2016</code>, <code>2017</code>, or <code>2018</code>) across any of the five business metrics. In the <code>2018</code> Total Revenue view (<code>top_k=10</code>), <code>4869f7a5dfa277a7dca6462dcf3b52b2</code> leads at <code>R$ 138,414.60</code> (<code>209</code> active days, <code>736</code> items), compared against the lowest operating merchant at <code>R$ 4.99</code>.</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/dashboard_page2_leaderboard.png" alt="Flask Dashboard Page 2: 2018 Annual Seller Leaderboard"><figcaption>Figure 3. Flask Dashboard Page 2: 2018 Annual Seller Leaderboard</figcaption></figure>
+<h2>5. Cross-System Result Presentation</h2>
+<p>Aggregations cross-checked across Python reference analytics, YARN MapReduce (<code>4,254</code> groups), MongoDB <code>$facet</code>/<code>$unwind</code>, and Hive HQL reveal strong marketplace growth from <code>2016</code> (<code>R$ 0.04M</code>, <code>348</code> items) to <code>2017</code> (<code>R$ 6.11M</code>, <code>50,617</code> items) and <code>2018</code> (<code>R$ 7.34M</code>, <code>61,136</code> items). Revenue is concentrated among <strong>289</strong> high-tier sellers (<code>66.3%</code> of revenue), while order-review <code>$unwind</code> + <code>$facet</code> analytics show <code>63,107</code> 5-star items alongside <code>13,735</code> 1-star items.</p>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/olist_annual_growth_and_top_sellers.png" alt="Olist marketplace annual growth, top 8 sellers, and revenue tier distribution"><figcaption>Figure 4. Olist marketplace annual growth, top 8 sellers, and revenue tier distribution</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_review_score_unwind_facet.png" alt="MongoDB $unwind + $facet analysis of order items by customer review score"><figcaption>Figure 5. MongoDB $unwind + $facet analysis of order items by customer review score</figcaption></figure>
+<h2>6. Performance Evaluation</h2>
+<p>Both Theme 1 (MongoDB indexing) and Theme 3 (Hive RCFile compression) performance benchmarks were verified on the live Olist dataset:</p>
+<ul>
+<li><strong>MongoDB <code>.explain("executionStats")</code>:</strong> Compound index <code>seller_year</code> reduced examined documents from <code>22,973</code> (<code>COLLSCAN</code>, <code>17 ms</code>) to <code>100</code> (<code>IXSCAN</code>, <code>3 ms</code>) — a <strong>229.73x scan reduction</strong> and <strong>5.67x speedup</strong>.</li>
+<li><strong>Hive <code>TEXTFILE</code> vs Gzip <code>RCFILE</code>:</strong> Converting <code>daily_text</code> (<code>4,401,177</code> B) to <code>daily_rcfile</code> (<code>937,005</code> B) achieved a <strong>4.697x compression ratio</strong> (<strong>78.71% space savings</strong>) and executed the identical annual seller summary query <strong>1.116x faster</strong> (<code>50.897s</code> vs <code>56.782s</code>) with identical outputs verified via <code>diff</code>.</li>
+</ul>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme1_mongodb_index_profiling.png" alt="MongoDB IXSCAN vs COLLSCAN performance chart"><figcaption>Figure 6. MongoDB IXSCAN vs COLLSCAN performance chart</figcaption></figure>
+<figure><img src="file:///c:/Users/Preethi/OneDrive/Downloads/engineering/7th%20sem/4%20big%20data%20analytics/bda-master/bda-master/results/report_images/theme3_hive_text_vs_rcfile.png" alt="Hive TEXTFILE vs Gzip RCFile storage footprint and execution time chart"><figcaption>Figure 7. Hive TEXTFILE vs Gzip RCFile storage footprint and execution time chart</figcaption></figure>
+<h2>7. Conclusion and References</h2>
+<p>The Flask Seller Analytics Engine unifies the Olist multi-system Big Data pipeline into an interactive, validated two-page web application backed by <strong>8/8</strong> passing automated tests (<code>test_ecommerce_workflow.py</code> and <code>test_mongo_profile.py</code>). Decoupling offline batch/NoSQL processing from read-only dashboard rendering keeps UI latency low while preserving exact reproducibility.</p>
+<p>1. Kaggle Brazilian E-Commerce Public Dataset by Olist — https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce</p>
+<p>2. Flask Documentation — https://flask.palletsprojects.com/</p>
+<p>3. MongoDB Aggregation & Query Performance — https://www.mongodb.com/docs/manual/core/aggregation-pipeline/</p>
+<p>4. Apache Hadoop & Hive Language Manual — https://cwiki.apache.org/confluence/display/Hive/LanguageManual</p></body></html>

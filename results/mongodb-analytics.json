@@ -1,0 +1,496 @@
+{
+  "database": "ecommerce_olist",
+  "collection": "daily_sales",
+  "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2",
+  "document_count": 69065,
+  "indexes": {
+    "_id_": {
+      "keys": [
+        [
+          "_id",
+          1
+        ]
+      ],
+      "unique": false
+    },
+    "seller_year": {
+      "keys": [
+        [
+          "seller_id",
+          1
+        ],
+        [
+          "year",
+          1
+        ]
+      ],
+      "unique": false
+    },
+    "date": {
+      "keys": [
+        [
+          "date",
+          1
+        ]
+      ],
+      "unique": false
+    }
+  },
+  "query_profile": {
+    "description": "Find daily records for one seller across 2016-2018 (IXSCAN vs COLLSCAN)",
+    "indexed_stages": [
+      "LIMIT",
+      "PROJECTION_SIMPLE",
+      "FETCH",
+      "IXSCAN"
+    ],
+    "explain_execution_stats": [
+      {
+        "executionSuccess": true,
+        "nReturned": 100,
+        "executionTimeMillis": 5,
+        "totalKeysExamined": 100,
+        "totalDocsExamined": 100
+      }
+    ],
+    "unindexed_stages": [
+      "LIMIT",
+      "PROJECTION_SIMPLE",
+      "COLLSCAN"
+    ],
+    "unindexed_execution_stats": [
+      {
+        "executionSuccess": true,
+        "nReturned": 100,
+        "executionTimeMillis": 10,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 22973
+      }
+    ],
+    "index_comparison": {
+      "unindexed_docs_examined": 22973,
+      "indexed_docs_examined": 100,
+      "docs_examined_reduction_ratio": 229.73,
+      "unindexed_time_ms": 10,
+      "indexed_time_ms": 5,
+      "speedup_ratio": 2.0
+    }
+  },
+  "aggregation_profile": {
+    "description": "Group the selected seller's daily records by year",
+    "stages": [
+      "PROJECTION_SIMPLE",
+      "FETCH",
+      "IXSCAN"
+    ],
+    "explain_execution_stats": [
+      {
+        "executionSuccess": true,
+        "nReturned": 358,
+        "executionTimeMillis": 4,
+        "totalKeysExamined": 358,
+        "totalDocsExamined": 358
+      }
+    ],
+    "annual_results": [
+      {
+        "days": 149,
+        "orders": 419,
+        "revenue_brl": 90823.03,
+        "max_daily_revenue": 2446.8,
+        "peak_order_brl": 899.99,
+        "year": 2017,
+        "mean_daily_revenue": 609.5505369127517
+      },
+      {
+        "days": 209,
+        "orders": 736,
+        "revenue_brl": 138414.6,
+        "max_daily_revenue": 3014.9,
+        "peak_order_brl": 890.0,
+        "year": 2018,
+        "mean_daily_revenue": 662.2708133971292
+      }
+    ]
+  },
+  "faceted_pipeline_profile": {
+    "description": "Multi-stage $match, $facet ($group, $project), $unwind analytics",
+    "explain_execution_stats": [
+      {
+        "executionSuccess": true,
+        "nReturned": 69065,
+        "executionTimeMillis": 258,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 69065
+      }
+    ],
+    "results": [
+      {
+        "top_sellers": [
+          {
+            "total_revenue_brl": 229237.63,
+            "total_orders": 1155,
+            "active_days": 358,
+            "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2"
+          },
+          {
+            "total_revenue_brl": 222776.05,
+            "total_orders": 410,
+            "active_days": 150,
+            "seller_id": "53243585a1d6dc2643021fd1853d8905"
+          },
+          {
+            "total_revenue_brl": 200326.12,
+            "total_orders": 1985,
+            "active_days": 537,
+            "seller_id": "4a3ca9315b744ce9f8e9374361493884"
+          },
+          {
+            "total_revenue_brl": 192842.13,
+            "total_orders": 585,
+            "active_days": 341,
+            "seller_id": "fa1c13f2614d7b5c4749cbc52fecda94"
+          },
+          {
+            "total_revenue_brl": 187923.89,
+            "total_orders": 1364,
+            "active_days": 375,
+            "seller_id": "7c67e1448b00f6e969d365cea6b010ab"
+          },
+          {
+            "total_revenue_brl": 172583.88,
+            "total_orders": 336,
+            "active_days": 207,
+            "seller_id": "7e93a43ef30c4f03f38b393420bc753a"
+          },
+          {
+            "total_revenue_brl": 160236.57,
+            "total_orders": 1551,
+            "active_days": 438,
+            "seller_id": "da8622b14eb17ae2831f4ac5b9dab84a"
+          },
+          {
+            "total_revenue_brl": 141715.54,
+            "total_orders": 1170,
+            "active_days": 472,
+            "seller_id": "7a67c85e85bb2ce8582c35f2203ad736"
+          },
+          {
+            "total_revenue_brl": 138968.55,
+            "total_orders": 1428,
+            "active_days": 308,
+            "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa"
+          },
+          {
+            "total_revenue_brl": 135159.7,
+            "total_orders": 1498,
+            "active_days": 325,
+            "seller_id": "955fee9216a65b617aa5c0531780ce60"
+          }
+        ],
+        "revenue_tiers": [
+          {
+            "seller_count": 289,
+            "tier_revenue_brl": 8943353.4,
+            "tier": "high"
+          },
+          {
+            "seller_count": 1125,
+            "tier_revenue_brl": 4011294.91,
+            "tier": "medium"
+          },
+          {
+            "seller_count": 1639,
+            "tier_revenue_brl": 539752.43,
+            "tier": "low"
+          }
+        ],
+        "year": 2016,
+        "active_seller_days": 233,
+        "unique_sellers": 134,
+        "orders": 348,
+        "revenue_brl": 44726.06,
+        "peak_order_brl": 1399.0
+      },
+      {
+        "top_sellers": [
+          {
+            "total_revenue_brl": 229237.63,
+            "total_orders": 1155,
+            "active_days": 358,
+            "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2"
+          },
+          {
+            "total_revenue_brl": 222776.05,
+            "total_orders": 410,
+            "active_days": 150,
+            "seller_id": "53243585a1d6dc2643021fd1853d8905"
+          },
+          {
+            "total_revenue_brl": 200326.12,
+            "total_orders": 1985,
+            "active_days": 537,
+            "seller_id": "4a3ca9315b744ce9f8e9374361493884"
+          },
+          {
+            "total_revenue_brl": 192842.13,
+            "total_orders": 585,
+            "active_days": 341,
+            "seller_id": "fa1c13f2614d7b5c4749cbc52fecda94"
+          },
+          {
+            "total_revenue_brl": 187923.89,
+            "total_orders": 1364,
+            "active_days": 375,
+            "seller_id": "7c67e1448b00f6e969d365cea6b010ab"
+          },
+          {
+            "total_revenue_brl": 172583.88,
+            "total_orders": 336,
+            "active_days": 207,
+            "seller_id": "7e93a43ef30c4f03f38b393420bc753a"
+          },
+          {
+            "total_revenue_brl": 160236.57,
+            "total_orders": 1551,
+            "active_days": 438,
+            "seller_id": "da8622b14eb17ae2831f4ac5b9dab84a"
+          },
+          {
+            "total_revenue_brl": 141715.54,
+            "total_orders": 1170,
+            "active_days": 472,
+            "seller_id": "7a67c85e85bb2ce8582c35f2203ad736"
+          },
+          {
+            "total_revenue_brl": 138968.55,
+            "total_orders": 1428,
+            "active_days": 308,
+            "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa"
+          },
+          {
+            "total_revenue_brl": 135159.7,
+            "total_orders": 1498,
+            "active_days": 325,
+            "seller_id": "955fee9216a65b617aa5c0531780ce60"
+          }
+        ],
+        "revenue_tiers": [
+          {
+            "seller_count": 289,
+            "tier_revenue_brl": 8943353.4,
+            "tier": "high"
+          },
+          {
+            "seller_count": 1125,
+            "tier_revenue_brl": 4011294.91,
+            "tier": "medium"
+          },
+          {
+            "seller_count": 1639,
+            "tier_revenue_brl": 539752.43,
+            "tier": "low"
+          }
+        ],
+        "year": 2017,
+        "active_seller_days": 31422,
+        "unique_sellers": 1766,
+        "orders": 50617,
+        "revenue_brl": 6108492.2700000005,
+        "peak_order_brl": 6735.0
+      },
+      {
+        "top_sellers": [
+          {
+            "total_revenue_brl": 229237.63,
+            "total_orders": 1155,
+            "active_days": 358,
+            "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2"
+          },
+          {
+            "total_revenue_brl": 222776.05,
+            "total_orders": 410,
+            "active_days": 150,
+            "seller_id": "53243585a1d6dc2643021fd1853d8905"
+          },
+          {
+            "total_revenue_brl": 200326.12,
+            "total_orders": 1985,
+            "active_days": 537,
+            "seller_id": "4a3ca9315b744ce9f8e9374361493884"
+          },
+          {
+            "total_revenue_brl": 192842.13,
+            "total_orders": 585,
+            "active_days": 341,
+            "seller_id": "fa1c13f2614d7b5c4749cbc52fecda94"
+          },
+          {
+            "total_revenue_brl": 187923.89,
+            "total_orders": 1364,
+            "active_days": 375,
+            "seller_id": "7c67e1448b00f6e969d365cea6b010ab"
+          },
+          {
+            "total_revenue_brl": 172583.88,
+            "total_orders": 336,
+            "active_days": 207,
+            "seller_id": "7e93a43ef30c4f03f38b393420bc753a"
+          },
+          {
+            "total_revenue_brl": 160236.57,
+            "total_orders": 1551,
+            "active_days": 438,
+            "seller_id": "da8622b14eb17ae2831f4ac5b9dab84a"
+          },
+          {
+            "total_revenue_brl": 141715.54,
+            "total_orders": 1170,
+            "active_days": 472,
+            "seller_id": "7a67c85e85bb2ce8582c35f2203ad736"
+          },
+          {
+            "total_revenue_brl": 138968.55,
+            "total_orders": 1428,
+            "active_days": 308,
+            "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa"
+          },
+          {
+            "total_revenue_brl": 135159.7,
+            "total_orders": 1498,
+            "active_days": 325,
+            "seller_id": "955fee9216a65b617aa5c0531780ce60"
+          }
+        ],
+        "revenue_tiers": [
+          {
+            "seller_count": 289,
+            "tier_revenue_brl": 8943353.4,
+            "tier": "high"
+          },
+          {
+            "seller_count": 1125,
+            "tier_revenue_brl": 4011294.91,
+            "tier": "medium"
+          },
+          {
+            "seller_count": 1639,
+            "tier_revenue_brl": 539752.43,
+            "tier": "low"
+          }
+        ],
+        "year": 2018,
+        "active_seller_days": 37410,
+        "unique_sellers": 2354,
+        "orders": 61136,
+        "revenue_brl": 7341182.41,
+        "peak_order_brl": 6729.0
+      }
+    ]
+  },
+  "orders_enriched_profile": {
+    "document_count": 99441,
+    "explain_execution_stats": [
+      {
+        "executionSuccess": true,
+        "nReturned": 98207,
+        "executionTimeMillis": 626,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 99441
+      }
+    ],
+    "results": [
+      {
+        "seller_item_totals": [
+          {
+            "items_sold": 1155,
+            "total_price_brl": 229237.63,
+            "total_freight_brl": 20155.81,
+            "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2"
+          },
+          {
+            "items_sold": 410,
+            "total_price_brl": 222776.05,
+            "total_freight_brl": 13080.63,
+            "seller_id": "53243585a1d6dc2643021fd1853d8905"
+          },
+          {
+            "items_sold": 1985,
+            "total_price_brl": 200326.12,
+            "total_freight_brl": 35033.18,
+            "seller_id": "4a3ca9315b744ce9f8e9374361493884"
+          },
+          {
+            "items_sold": 585,
+            "total_price_brl": 192842.13,
+            "total_freight_brl": 10019.54,
+            "seller_id": "fa1c13f2614d7b5c4749cbc52fecda94"
+          },
+          {
+            "items_sold": 1364,
+            "total_price_brl": 187923.89,
+            "total_freight_brl": 51612.55,
+            "seller_id": "7c67e1448b00f6e969d365cea6b010ab"
+          },
+          {
+            "items_sold": 336,
+            "total_price_brl": 172583.88,
+            "total_freight_brl": 6254.54,
+            "seller_id": "7e93a43ef30c4f03f38b393420bc753a"
+          },
+          {
+            "items_sold": 1551,
+            "total_price_brl": 160236.57,
+            "total_freight_brl": 24955.75,
+            "seller_id": "da8622b14eb17ae2831f4ac5b9dab84a"
+          },
+          {
+            "items_sold": 1170,
+            "total_price_brl": 141715.54,
+            "total_freight_brl": 20891.7,
+            "seller_id": "7a67c85e85bb2ce8582c35f2203ad736"
+          },
+          {
+            "items_sold": 1428,
+            "total_price_brl": 138968.55,
+            "total_freight_brl": 33892.14,
+            "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa"
+          },
+          {
+            "items_sold": 1498,
+            "total_price_brl": 135159.7,
+            "total_freight_brl": 25423.2,
+            "seller_id": "955fee9216a65b617aa5c0531780ce60"
+          }
+        ],
+        "review_score_summary": [
+          {
+            "item_count": 63107,
+            "avg_item_price_brl": 121.38860633527185,
+            "review_score": 5
+          },
+          {
+            "item_count": 21188,
+            "avg_item_price_brl": 118.71550783462338,
+            "review_score": 4
+          },
+          {
+            "item_count": 9336,
+            "avg_item_price_brl": 109.92101542416452,
+            "review_score": 3
+          },
+          {
+            "item_count": 3810,
+            "avg_item_price_brl": 115.49803937007874,
+            "review_score": 2
+          },
+          {
+            "item_count": 13735,
+            "avg_item_price_brl": 125.95596214051692,
+            "review_score": 1
+          }
+        ]
+      }
+    ]
+  }
+}
