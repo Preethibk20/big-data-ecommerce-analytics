@@ -48,7 +48,7 @@
       {
         "executionSuccess": true,
         "nReturned": 100,
-        "executionTimeMillis": 5,
+        "executionTimeMillis": 4,
         "totalKeysExamined": 100,
         "totalDocsExamined": 100
       }
@@ -62,7 +62,7 @@
       {
         "executionSuccess": true,
         "nReturned": 100,
-        "executionTimeMillis": 10,
+        "executionTimeMillis": 11,
         "totalKeysExamined": 0,
         "totalDocsExamined": 22973
       }
@@ -71,9 +71,9 @@
       "unindexed_docs_examined": 22973,
       "indexed_docs_examined": 100,
       "docs_examined_reduction_ratio": 229.73,
-      "unindexed_time_ms": 10,
-      "indexed_time_ms": 5,
-      "speedup_ratio": 2.0
+      "unindexed_time_ms": 11,
+      "indexed_time_ms": 4,
+      "speedup_ratio": 2.75
     }
   },
   "aggregation_profile": {
@@ -87,7 +87,7 @@
       {
         "executionSuccess": true,
         "nReturned": 358,
-        "executionTimeMillis": 4,
+        "executionTimeMillis": 9,
         "totalKeysExamined": 358,
         "totalDocsExamined": 358
       }
@@ -119,7 +119,7 @@
       {
         "executionSuccess": true,
         "nReturned": 69065,
-        "executionTimeMillis": 258,
+        "executionTimeMillis": 510,
         "totalKeysExamined": 0,
         "totalDocsExamined": 69065
       }
@@ -394,7 +394,7 @@
       {
         "executionSuccess": true,
         "nReturned": 98207,
-        "executionTimeMillis": 626,
+        "executionTimeMillis": 936,
         "totalKeysExamined": 0,
         "totalDocsExamined": 99441
       }

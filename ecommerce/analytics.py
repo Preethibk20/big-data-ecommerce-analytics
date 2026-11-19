@@ -165,15 +165,35 @@ def seller_year_view(data, query, pie_metric="revenue_brl"):
     if not matched_seller_id:
         return None
 
-    records = sorted(
-        (row for row in data["records"] if row["seller_id"] == matched_seller_id),
-        key=lambda row: row["year"],
-    )
-    if not records:
+    existing_by_year = {
+        row["year"]: row
+        for row in data["records"]
+        if row["seller_id"] == matched_seller_id
+    }
+    if not existing_by_year:
         return None
 
-    highest = max(records, key=lambda row: (row["revenue_brl"], -row["year"]))
-    lowest = min(records, key=lambda row: (row["revenue_brl"], row["year"]))
+    dataset_years = sorted(data.get("years") or existing_by_year.keys())
+    records = []
+    for yr in dataset_years:
+        if yr in existing_by_year:
+            records.append(existing_by_year[yr])
+        else:
+            records.append({
+                "seller_id": matched_seller_id,
+                "year": yr,
+                "days": 0,
+                "orders": 0,
+                "revenue_brl": 0.0,
+                "mean_daily_revenue": 0.0,
+                "max_daily_revenue": 0.0,
+                "peak_order_brl": 0.0,
+            })
+
+    active = [r for r in records if r["orders"] > 0]
+    eval_recs = active if active else records
+    highest = max(eval_recs, key=lambda row: (row["revenue_brl"], -row["year"]))
+    lowest = min(eval_recs, key=lambda row: (row["revenue_brl"], row["year"]))
 
     return {
         "seller_id": matched_seller_id,

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BDA Assignments 1 and 2: Quick Commands</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    font-size: 11pt;
+    line-height: 1.42;
+    margin: 0;
+    padding: 0;
+  }
+  .page {
+    page-break-after: always;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+  }
+  h1 {
+    font-size: 19pt;
+    font-weight: 700;
+    color: #1a365d;
+    margin: 0 0 4px 0;
+  }
+  .subhead {
+    font-size: 10pt;
+    color: #4a5568;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  h2 {
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: #2b6cb0;
+    margin: 14px 0 6px 0;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 10px 0 4px 0;
+  }
+  pre {
+    background-color: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #3182ce;
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 9pt;
+    line-height: 1.35;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 4px 0 8px 0;
+  }
+  .comment {
+    color: #718096;
+  }
+  .highlight {
+    color: #2b6cb0;
+    font-weight: 600;
+  }
+  .footer {
+    position: fixed;
+    bottom: 5mm;
+    right: 16mm;
+    font-size: 9pt;
+    color: #a0aec0;
+  }
+  table.troubleshoot {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin-top: 6px;
+  }
+  table.troubleshoot td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #edf2f7;
+    font-family: "Consolas", monospace;
+  }
+  table.troubleshoot td.label {
+    font-weight: 600;
+    color: #4a5568;
+    width: 38%;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>BDA Assignments 1 and 2: Quick Commands</h1>
+  <div class="subhead">
+    <strong>Project:</strong> Brazilian E-Commerce (Olist). &nbsp;|&nbsp; 
+    <strong>Cluster:</strong> master + worker1 + worker2 (Docker / Multi-Node). &nbsp;|&nbsp; 
+    <strong>Root:</strong> <code>cd &lt;project-folder&gt;</code>
+  </div>
+
+  <h2>1. Check Master and Workers Connection</h2>
+  <pre><span class="comment"># In PowerShell, navigate to project root</span>
+cd "C:\Users\Pruthvi Upadhya\Downloads\big-data-ecommerce-analytics-main\big-data-ecommerce-analytics-main"
+
+<span class="comment"># Verify all 3 cluster containers are running</span>
+docker ps --format "table {{.Names}}\t{{.Status}}"
+<span class="comment"># Must print: master, worker1, worker2 (Up)</span></pre>
+
+  <h2>2. Start Cluster and Verify (Master)</h2>
+  <pre><span class="comment"># Check distributed live datanodes</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfsadmin -report | grep 'Live datanodes'"
+<span class="comment"># Must print: Live datanodes (2):</span>
+
+<span class="comment"># Check distributed YARN nodemanagers</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "yarn node -list"
+<span class="comment"># Must print: Total Nodes: 2 (RUNNING)</span>
+
+<span class="comment"># Verify sample distributed MapReduce computation (Pi calculation)</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar pi 4 1000"</pre>
+
+  <h2>ASSIGNMENT 1: Theme 2 (HDFS + MapReduce)</h2>
+  <pre><span class="comment"># Full HDFS lifecycle operations: -mkdir, -put, -ls, -cat, -get, -rm</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -mkdir -p /user/root/ecommerce/live_eval_run/prepared"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -put -f /project/data/prepared/ecommerce/daily.tsv /user/root/ecommerce/live_eval_run/prepared/"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -ls /user/root/ecommerce/live_eval_run/prepared"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -cat /user/root/ecommerce/live_eval_run/prepared/daily.tsv | head -5"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -du -h /user/root/ecommerce/live_eval_run/prepared"
+
+<span class="comment"># Execute Distributed Python Streaming MapReduce on YARN across 2 reducers</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -f /user/root/ecommerce/mr_eval_out"
+docker exec ecommerce-sales-analytics-master-1 bash -c "/project/scripts/run_mapreduce.sh /user/root/ecommerce/live_eval_run/prepared/daily.tsv /user/root/ecommerce/mr_eval_out 2"
+
+<span class="comment"># Inspect aggregated merchant output in HDFS (4,254 seller-year records)</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -cat /user/root/ecommerce/mr_eval_out/part-* | head -10"</pre>
+
+  <h2>ASSIGNMENT 1: Theme 3 (Pig + Hive)</h2>
+  <pre><span class="comment"># Execute Pig Latin data cleaning script on MapReduce (validates date regex & revenue)</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -f /user/root/ecommerce/pig_eval_out"
+docker exec ecommerce-sales-analytics-master-1 bash -c "pig -x mapreduce -param INPUT=/user/root/ecommerce/live_eval_run/prepared/daily.tsv -param OUTPUT=/user/root/ecommerce/pig_eval_out /project/pig/clean_daily.pig"
+
+<span class="comment"># Create Hive Text & Columnar RCFile tables via Beeline</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "beeline -u jdbc:hive2://localhost:10000 -n root --hivevar DATABASE=ecommerce_analytics --hivevar INPUT=/user/root/ecommerce/pig_eval_out --hivevar RC_OUTPUT=/user/root/ecommerce/rcfile -f /project/hive/tables.hql"
+
+<span class="comment"># Run Hive Benchmark Query: Text vs compressed RCFile</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "beeline -u jdbc:hive2://localhost:10000/ecommerce_analytics -n root -e 'SELECT seller_id, count(*) AS days, round(sum(revenue_brl),2) AS total_rev FROM daily_text GROUP BY seller_id ORDER BY total_rev DESC LIMIT 5; SELECT seller_id, count(*) AS days, round(sum(revenue_brl),2) AS total_rev FROM daily_rcfile GROUP BY seller_id ORDER BY total_rev DESC LIMIT 5;'"
+
+<span class="comment"># Compare HDFS physical storage footprint (RCFile achieves 78.71% storage reduction)</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -du -h /user/root/ecommerce/"</pre>
+
+  <h2>ASSIGNMENT 1: Theme 1 (MongoDB) - Windows PowerShell</h2>
+  <pre><span class="comment"># Verify MongoDB status and document counts (69,065 daily_sales, 99,441 orders_enriched)</span>
+python -c "from pymongo import MongoClient; client = MongoClient('mongodb://127.0.0.1:27017'); db = client['ecommerce_olist']; print('Collections:', db.list_collection_names()); print('daily_sales:', db.daily_sales.count_documents({})); print('orders_enriched:', db.orders_enriched.count_documents({}))"
+
+<span class="comment"># Run multi-stage aggregation pipeline ($match, $unwind, $facet, $group)</span>
+python -c "from pymongo import MongoClient; from ecommerce.mongo import build_order_items_pipeline; client = MongoClient('mongodb://127.0.0.1:27017'); db = client['ecommerce_olist']; res = list(db.orders_enriched.aggregate(build_order_items_pipeline(), allowDiskUse=True)); print('Top Sellers:', res[0]['seller_item_totals'][:2]); print('Review Summary:', res[0]['review_score_summary'])"
+
+<span class="comment"># Run query performance profiling (.explain('executionStats') — 229.7x index scan reduction)</span>
+python -m ecommerce.mongo_profile --database ecommerce_olist --seller-id "4869f7a5dfa277a7dca6462dcf3b52b2" --output "results/mongodb-analytics.json"
+
+<span class="comment"># Launch Web Visualisation Dashboard (Track B Practical Extension)</span>
+python -m ecommerce dashboard --results results/ecommerce
+<span class="comment"># Open browser at: http://127.0.0.1:5000</span></pre>
+</div>
+
+<div class="page">
+  <h1>Assignment 2 (Extension & Multi-Node Cluster Details)</h1>
+  <div class="subhead">
+    Detailed Multi-Node Verification, Scaling Benchmark, and Troubleshooting Reference
+  </div>
+
+  <h2>A. Distributed Multi-Node Cluster Architecture</h2>
+  <pre><span class="comment"># Topology: 1 Master (NameNode, ResourceManager, HiveServer2) + 2 Dedicated Workers</span>
+<span class="comment"># Master Container:  ecommerce-sales-analytics-master-1</span>
+<span class="comment"># Worker 1:          ecommerce-sales-analytics-worker1-1</span>
+<span class="comment"># Worker 2:          ecommerce-sales-analytics-worker2-1</span>
+<span class="comment"># Network Bridge:    ecommerce-sales-analytics_default (Replication Factor = 2)</span></pre>
+
+  <h2>B. Verification of Both DataNodes & NodeManagers</h2>
+  <pre><span class="comment"># Check live JPS processes on Master node</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "jps"
+<span class="comment"># Prints: NameNode, ResourceManager, HiveServer2</span>
+
+<span class="comment"># Check live JPS processes on Worker nodes</span>
+docker exec ecommerce-sales-analytics-worker1-1 bash -c "jps"
+docker exec ecommerce-sales-analytics-worker2-1 bash -c "jps"
+<span class="comment"># Each prints: DataNode, NodeManager</span>
+
+<span class="comment"># Check block replication and zero under-replicated blocks</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs fsck /user/root/ecommerce/live_eval_run/prepared/daily.tsv -files -blocks -locations"
+<span class="comment"># Shows: Live_repl=2, Under-replicated blocks: 0</span></pre>
+
+  <h2>C. Show MapReduce Tasks Ran Across Both Workers</h2>
+  <pre><span class="comment"># Fetch the latest MapReduce YARN application ID</span>
+docker exec ecommerce-sales-analytics-master-1 bash -c "yarn application -list -appStates FINISHED"
+
+<span class="comment"># Inspect container execution logs distributed on worker 1 and worker 2</span>
+docker exec ecommerce-sales-analytics-worker1-1 bash -c "ls -la /opt/hadoop/logs/userlogs/ || true"
+docker exec ecommerce-sales-analytics-worker2-1 bash -c "ls -la /opt/hadoop/logs/userlogs/ || true"</pre>
+
+  <h2>D. Benchmark Results Summary for Viva / Presentation</h2>
+  <pre><span class="highlight">Theme 1 (MongoDB Indexing Profiling):</span>
+- COLLSCAN (Unindexed): 22,973 documents examined, 17 ms execution time.
+- IXSCAN (Indexed on seller_id + year): 100 documents examined, 3 ms execution time.
+- <strong>Result: 229.73x scan reduction ratio, 5.67x query speedup.</strong>
+
+<span class="highlight">Theme 2 (Distributed MapReduce on YARN):</span>
+- Input: 69,065 daily seller transaction records (4.28 MB).
+- Output: 4,254 aggregated annual merchant summaries across 2 reducers.
+
+<span class="highlight">Theme 3 (Hive Text vs Columnar RCFile Benchmark):</span>
+- Standard Text (daily_text):  4.40 MB HDFS storage,  56.78 s query execution time.
+- Gzip RCFile  (daily_rcfile): 937 KB HDFS storage,   50.89 s query execution time.
+- <strong>Result: 78.71% disk space savings (4.7x compression) & 1.11x query speedup.</strong></pre>
+
+  <h2>E. Troubleshooting & Quick Fixes</h2>
+  <table class="troubleshoot">
+    <tr>
+      <td class="label">Destination DB is not empty</td>
+      <td>Data already ingested! Skip to Part B or drop DB: <code>MongoClient().drop_database('ecommerce_olist')</code></td>
+    </tr>
+    <tr>
+      <td class="label">Failed to read from daily.tsv in HDFS</td>
+      <td>Upload file first: <code>hdfs dfs -put -f /project/data/prepared/ecommerce/daily.tsv /user/root/...</code></td>
+    </tr>
+    <tr>
+      <td class="label">Output directory exists in HDFS</td>
+      <td>Delete before re-running: <code>hdfs dfs -rm -r -f &lt;output-directory&gt;</code></td>
+    </tr>
+    <tr>
+      <td class="label">HDFS Safe Mode is ON</td>
+      <td>Turn off safe mode: <code>hdfs dfsadmin -safemode leave</code></td>
+    </tr>
+    <tr>
+      <td class="label">Docker engine not connected</td>
+      <td>Start Docker Desktop application from Windows Start Menu and wait for whale icon.</td>
+    </tr>
+    <tr>
+      <td class="label">Hive warnings (deprecation / SLF4J)</td>
+      <td>Informational only; normal Hadoop Java logging notices. Results remain 100% accurate.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

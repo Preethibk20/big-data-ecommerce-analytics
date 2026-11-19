@@ -737,26 +737,28 @@
 
           let angle = -Math.PI / 2;
           values.forEach((val, idx) => {
-            const next = angle + (val / total) * Math.PI * 2;
-            const x1 = 100 + 85 * Math.cos(angle);
-            const y1 = 100 + 85 * Math.sin(angle);
-            const x2 = 100 + 85 * Math.cos(next);
-            const y2 = 100 + 85 * Math.sin(next);
-            const largeArc = (next - angle) > Math.PI ? 1 : 0;
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', `M 100 100 L ${x1} ${y1} A 85 85 0 ${largeArc} 1 ${x2} ${y2} Z`);
-            path.setAttribute('fill', colors[idx % colors.length]);
-            svg.appendChild(path);
+            if (val > 0) {
+              const next = angle + (val / total) * Math.PI * 2;
+              const x1 = 100 + 85 * Math.cos(angle);
+              const y1 = 100 + 85 * Math.sin(angle);
+              const x2 = 100 + 85 * Math.cos(next);
+              const y2 = 100 + 85 * Math.sin(next);
+              const largeArc = (next - angle) > Math.PI ? 1 : 0;
+              const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              path.setAttribute('d', `M 100 100 L ${x1} ${y1} A 85 85 0 ${largeArc} 1 ${x2} ${y2} Z`);
+              path.setAttribute('fill', colors[idx % colors.length]);
+              svg.appendChild(path);
+              angle = next;
+            }
 
             const li = document.createElement('li');
             li.className = 'legend-item';
             const dot = document.createElement('span');
             dot.className = 'legend-dot';
             dot.style.background = colors[idx % colors.length];
-            const pct = ((val / total) * 100).toFixed(1);
+            const pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
             li.append(dot, document.createTextNode(`${years[idx]}: ${pct}% (${val.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metricUnit})`));
             legend.appendChild(li);
-            angle = next;
           });
         })();
       </script>

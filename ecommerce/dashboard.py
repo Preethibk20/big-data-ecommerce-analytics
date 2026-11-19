@@ -26,7 +26,10 @@ def create_app(results_dir):
 
         years = sorted(data["years"])
         default_top_k = min(10, data["sellers"])
-        top_seller_ids = data.get("top_seller_ids", [])[:8]
+        top_seller_ids = list(data.get("top_seller_ids", [])[:8])
+        three_year_top = "620c87c171fb2a6dd6e8bb4dec959fc6"
+        if three_year_top in data.get("top_seller_ids", []) and three_year_top not in top_seller_ids:
+            top_seller_ids.append(three_year_top)
 
         if page == "seller":
             seller_query = request.args.get("seller_id", "").strip()

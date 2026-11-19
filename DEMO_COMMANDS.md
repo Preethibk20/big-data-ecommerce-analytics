@@ -128,7 +128,7 @@ Live datanodes (2):
 ### Part B: HDFS Lifecycle Operations (`-mkdir`, `-put`, `-cat`, `-get`, `-rm -r`)
 ### Command to Copy:
 ```powershell
-docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -skipTrash /user/root/ecommerce/live_eval_run 2>/dev/null || true; /project/scripts/hdfs_demo.sh /project/data/prepared/ecommerce/daily.tsv /project/data/prepared/ecommerce /user/root/ecommerce/live_eval_run"
+docker exec ecommerce-sales-analytics-master-1 bash -c '/project/scripts/hdfs_demo.sh /project/data/prepared/ecommerce/daily.tsv /project/data/prepared/ecommerce /user/root/ecommerce/live_eval_run'
 ```
 
 ### Expected Output:
@@ -150,7 +150,7 @@ drwxr-xr-x   - root supergroup          0 /user/root/ecommerce/live_eval_run/raw
 ### Part C: Run Distributed MapReduce on YARN
 ### Command to Copy:
 ```powershell
-docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -skipTrash /user/root/ecommerce/mr_eval_out 2>/dev/null || true; /project/scripts/run_mapreduce.sh /user/root/ecommerce/live_eval_run/prepared/daily.tsv /user/root/ecommerce/mr_eval_out 2"
+docker exec ecommerce-sales-analytics-master-1 bash -c '/project/scripts/run_mapreduce.sh /user/root/ecommerce/live_eval_run/prepared/daily.tsv /user/root/ecommerce/mr_eval_out 2'
 ```
 
 ### Expected Output:
@@ -175,7 +175,7 @@ Output directory: /user/root/ecommerce/mr_eval_out
 ### Part A: Pig Latin Data Cleaning Pipeline
 ### Command to Copy:
 ```powershell
-docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -skipTrash /user/root/ecommerce/pig_eval_out 2>/dev/null || true; pig -x mapreduce -param INPUT=/user/root/ecommerce/live_eval_run/prepared/daily.tsv -param OUTPUT=/user/root/ecommerce/pig_eval_out /project/pig/clean_daily.pig"
+docker exec ecommerce-sales-analytics-master-1 bash -c 'pig -x mapreduce -param INPUT=/user/root/ecommerce/live_eval_run/prepared/daily.tsv -param OUTPUT=/user/root/ecommerce/pig_eval_out /project/pig/clean_daily.pig'
 ```
 
 ### Expected Output:

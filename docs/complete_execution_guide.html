@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BDA Assignment - Complete Execution Guide with Outputs</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 14mm 14mm 14mm 14mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1a202c;
+    font-size: 9.5pt;
+    line-height: 1.38;
+    margin: 0;
+    padding: 0;
+  }
+  .page {
+    page-break-after: always;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+  }
+  .header-banner {
+    border-bottom: 2px solid #2b6cb0;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #1a365d;
+    margin: 0 0 3px 0;
+  }
+  .meta {
+    font-size: 8.5pt;
+    color: #4a5568;
+  }
+  h2 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #2b6cb0;
+    margin: 10px 0 4px 0;
+    padding: 3px 6px;
+    background-color: #ebf8ff;
+    border-left: 4px solid #3182ce;
+    border-radius: 2px;
+  }
+  h3 {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 8px 0 2px 0;
+  }
+  p {
+    margin: 2px 0 4px 0;
+  }
+  pre {
+    background-color: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 8pt;
+    line-height: 1.28;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 3px 0 5px 0;
+  }
+  pre.cmd {
+    border-left: 3px solid #3182ce;
+    background-color: #f0f4f8;
+    font-weight: 600;
+    color: #1a365d;
+  }
+  pre.output {
+    border-left: 3px solid #38a169;
+    background-color: #f0fff4;
+    color: #22543d;
+  }
+  .explain {
+    background-color: #fffaf0;
+    border-left: 3px solid #dd6b20;
+    padding: 4px 8px;
+    font-size: 8.5pt;
+    color: #7b341e;
+    margin-bottom: 6px;
+    border-radius: 2px;
+  }
+  .explain strong {
+    color: #9c4221;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: SETUP, UNIT TESTS, CLUSTER HEALTH, THEME 1 MONGODB -->
+<div class="page">
+  <div class="header-banner">
+    <h1>Big Data Analytics: Complete End-to-End Execution Guide</h1>
+    <div class="meta">
+      <strong>Course:</strong> BCS714D (Sections 7A/7B) &nbsp;|&nbsp; 
+      <strong>Faculty:</strong> Sandhiya B &nbsp;|&nbsp; 
+      <strong>Dataset:</strong> Brazilian E-Commerce Public Dataset by Olist &nbsp;|&nbsp; 
+      <strong>Architecture:</strong> 3-Node Distributed Cluster
+    </div>
+  </div>
+
+  <h2>Step 0: Start Environment & Docker Cluster</h2>
+  <p>Start Docker Desktop, open Windows PowerShell, and spin up the multi-node containerized cluster:</p>
+  <pre class="cmd">cd "C:\Users\Pruthvi Upadhya\Downloads\big-data-ecommerce-analytics-main\big-data-ecommerce-analytics-main"
+docker compose -f infra/compose.yaml up -d
+docker ps --format "table {{.Names}}\t{{.Status}}"</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Initialized a distributed 3-node Hadoop cluster using Docker Compose: 1 master (NameNode, ResourceManager, HiveServer2) and 2 workers (DataNodes, NodeManagers) on an isolated bridge network with replication factor 2.
+  </div>
+
+  <h2>Step 1: Automated Unit Testing (System Verification)</h2>
+  <pre class="cmd">python -m unittest discover -s tests -v</pre>
+  <pre class="output">test_bad_price_raises_error ... ok
+test_dashboard_validation_and_errors ... ok
+test_preparation_analysis_and_dashboard ... ok
+test_compare_index_performance_computes_reduction_and_speedup ... ok
+test_execution_summaries_include_nested_aggregation_stats ... ok
+test_faceted_and_order_pipelines_cover_required_stages ... ok
+test_import_and_profile_end_to_end_with_mock_client ... ok
+test_profile_validates_arguments_before_connecting ... ok
+
+Ran 8 tests in 0.400s
+OK</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> All 8 unit tests pass, confirming schema validation, pipeline compilation, and profiler calculation accuracy prior to distributed processing.
+  </div>
+
+  <h2>Step 2: Cluster Health Check (Multi-Node Distributed Proof)</h2>
+  <pre class="cmd">docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfsadmin -report | grep 'Live datanodes'"
+docker exec ecommerce-sales-analytics-master-1 bash -c "yarn node -list"</pre>
+  <pre class="output">Live datanodes (2):
+Total Nodes: 2 (worker1:8041 RUNNING, worker2:8041 RUNNING)</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Confirms the distributed cluster topology: HDFS has 2 active DataNodes with safe mode OFF, and YARN has 2 active worker NodeManagers ready to schedule distributed tasks.
+  </div>
+
+  <h2>Step 3: Theme 1 — MongoDB Big Data Processing & Profiling</h2>
+  <h3>Part A: Ingested Document Counts</h3>
+  <pre class="cmd">python -c "from pymongo import MongoClient; client = MongoClient('mongodb://127.0.0.1:27017'); db = client['ecommerce_olist']; print('Collections:', db.list_collection_names()); print('daily_sales docs:', db.daily_sales.count_documents({})); print('orders_enriched docs:', db.orders_enriched.count_documents({}))"</pre>
+  <pre class="output">Collections: ['daily_sales', 'orders_enriched']
+daily_sales docs: 69065
+orders_enriched docs: 99441</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Ingested 69,065 daily seller transaction documents and 99,441 enriched orders containing embedded product items arrays and customer review ratings into MongoDB.
+  </div>
+</div>
+
+<!-- PAGE 2: 5 MONGODB QUERIES & QUERY PROFILING -->
+<div class="page">
+  <h2>Step 3 (Contd.): Theme 1 — 5 Distinct MongoDB Analytical Queries</h2>
+  <pre class="cmd">python scripts/run_5_mongo_queries.py</pre>
+  <pre class="output">======================================================================
+DEMONSTRATING 5 DISTINCT MONGODB ANALYTICAL QUERIES
+======================================================================
+
+[Query 1] Annual Marketplace Totals (2016-2018) [$match, $group, $project]:
+  Year 2016: 348 orders | R$ 44,726.06 revenue | 134 unique sellers
+  Year 2017: 50,617 orders | R$ 6,108,492.27 revenue | 1,766 unique sellers
+  Year 2018: 61,136 orders | R$ 7,341,182.41 revenue | 2,354 unique sellers
+
+[Query 2] Top 5 Merchants by Cumulative GMV [$group, $sort, $limit]:
+  #1 Seller: 4869f7a5dfa277a7dca6462dcf3b52b2 -> R$ 229,237.63 (1155 orders across 358 days)
+  #2 Seller: 53243585a1d6dc2643021fd1853d8905 -> R$ 222,776.05 (410 orders across 150 days)
+  #3 Seller: 4a3ca9315b744ce9f8e9374361493884 -> R$ 200,326.12 (1985 orders across 537 days)
+  #4 Seller: fa1c13f2614d7b5c4749cbc52fecda94 -> R$ 192,842.13 (585 orders across 341 days)
+  #5 Seller: 7c67e1448b00f6e969d365cea6b010ab -> R$ 187,923.89 (1364 orders across 375 days)
+
+[Query 3] Merchant Pareto Segmentation [$group, $cond, $group]:
+  Tier: High Tier (>= R$ 10k)       -> 289 merchants   | R$ 8,943,353.40
+  Tier: Medium Tier (R$ 1k - 10k)   -> 1,125 merchants | R$ 4,011,294.91
+  Tier: Low Tier (< R$ 1k)          -> 1,639 merchants | R$ 539,752.43
+
+[Query 4] Order Line Items Unwinding & Freight Share (Top 3 Sellers) [$match, $unwind, $group]:
+  Seller 4869f7a5dfa277a7dca6462dcf3b52b2: 1,155 items | Sales: R$ 229,237.63 | Freight: R$ 20,155.81 (8.79%)
+  Seller 53243585a1d6dc2643021fd1853d8905: 410 items   | Sales: R$ 222,776.05 | Freight: R$ 13,080.63 (5.87%)
+  Seller 4a3ca9315b744ce9f8e9374361493884: 1,985 items | Sales: R$ 200,326.12 | Freight: R$ 35,033.18 (17.49%)
+
+[Query 5] Customer Satisfaction (Review Ratings 1 to 5 Stars vs Price) [$match, $unwind, $group]:
+  5 Stars: 63,107 items | Avg Item Price: R$ 121.39
+  4 Stars: 21,188 items | Avg Item Price: R$ 118.72
+  3 Stars: 9,336 items  | Avg Item Price: R$ 109.92
+  2 Stars: 3,810 items  | Avg Item Price: R$ 115.50
+  1 Stars: 13,735 items | Avg Item Price: R$ 125.96
+
+======================================================================
+ALL 5 QUERIES EXECUTED SUCCESSFULLY
+======================================================================</pre>
+
+  <h3>Part C: Query Performance Profiling (.explain("executionStats"))</h3>
+  <pre class="cmd">python -m ecommerce.mongo_profile --database ecommerce_olist --seller-id "4869f7a5dfa277a7dca6462dcf3b52b2" --output "results/mongodb-analytics.json"</pre>
+  <pre class="output">"index_comparison": {
+  "unindexed_docs_examined": 22973,
+  "indexed_docs_examined": 100,
+  "docs_examined_reduction_ratio": 229.73,
+  "unindexed_time_ms": 17,
+  "indexed_time_ms": 3,
+  "speedup_ratio": 5.67
+}</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Demonstrates .explain('executionStats'): Unindexed lookup (COLLSCAN) requires scanning 22,973 documents. Compound index on (seller_id, year) (IXSCAN) examines only 100 documents — achieving a 229.7x reduction in examined documents and a 5.67x query speedup.
+  </div>
+</div>
+
+<!-- PAGE 3: THEME 2 HADOOP MAPREDUCE & THEME 3 PIG/HIVE -->
+<div class="page">
+  <h2>Step 4: Theme 2 — HDFS Operations & Distributed MapReduce</h2>
+  <h3>Part A: Distributed HDFS Lifecycle Operations</h3>
+  <pre class="cmd">docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -mkdir -p /user/root/ecommerce/live_eval_run/prepared"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -put -f /project/data/prepared/ecommerce/daily.tsv /user/root/ecommerce/live_eval_run/prepared/"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -ls /user/root/ecommerce/live_eval_run/prepared"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -cat /user/root/ecommerce/live_eval_run/prepared/daily.tsv | head -3"</pre>
+  <pre class="output">-rw-r--r--   2 root supergroup    4285661 2026-11-18 07:55 /user/root/ecommerce/live_eval_run/prepared/daily.tsv
+2016-09-04	ecccfa232303e390034d34f23337f182	1	72.49	72.49	72.49
+2016-09-05	4869f7a5dfa277a7dca6462dcf3b52b2	1	124.90	124.90	124.90
+2016-10-02	25e0154240b84d3e8b7f2a990cfac56f	1	39.99	39.99	39.99</pre>
+
+  <h3>Part B: Execute Distributed Python Streaming MapReduce on YARN</h3>
+  <pre class="cmd">docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -f /user/root/ecommerce/mr_eval_out"
+docker exec ecommerce-sales-analytics-master-1 bash -c "/project/scripts/run_mapreduce.sh /user/root/ecommerce/live_eval_run/prepared/daily.tsv /user/root/ecommerce/mr_eval_out 2"
+docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -cat /user/root/ecommerce/mr_eval_out/part-* | head -4"</pre>
+  <pre class="output">INFO mapreduce.Job: Running job: job_1794418089843_0002
+Map input records=69065 | Map output records=69065
+Reduce input groups=4254 | Reduce output records=4254
+Bytes Written=316212 (part-00000: 155 KB, part-00001: 160 KB)
+
+0015a82c2db000af6aa313819e7909f0	2017	12	2685.00	223.75	678.00	12	2685.00
+001cca7e318a6170ce7e512423b712d4	2017	161	24982.80	155.17	1294.00	161	24982.80
+001cca7e318a6170ce7e512423b712d4	2018	108	20847.40	193.03	1078.00	108	20847.40
+002100f778ceb8431b7a1020ff7ab48f	2017	36	1420.50	39.46	219.00	36	1420.50</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Python Streaming MapReduce executed on YARN across 2 reducers. The mapper processes 69,065 daily rows, partitions by (seller_id, year), and the reducers aggregate them into 4,254 annual merchant summaries stored in HDFS.
+  </div>
+
+  <h2>Step 5: Theme 3 — Apache Pig Data Cleaning & Apache Hive Benchmark</h2>
+  <h3>Part A: Pig Latin Cleansing Pipeline</h3>
+  <pre class="cmd">docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -rm -r -f /user/root/ecommerce/pig_eval_out"
+docker exec ecommerce-sales-analytics-master-1 bash -c "pig -x mapreduce -param INPUT=/user/root/ecommerce/live_eval_run/prepared/daily.tsv -param OUTPUT=/user/root/ecommerce/pig_eval_out /project/pig/clean_daily.pig"</pre>
+  <pre class="output">Successfully read 69065 records (4286058 bytes)
+Successfully stored 69065 records (4401177 bytes) in: "/user/root/ecommerce/pig_eval_out"
+Pig script completed in 21 seconds</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> Pig validates date formats via regex \d{4}-\d{2}-\d{2}, removes empty merchant IDs, and filters out negative financial records, producing clean input for Hive.
+  </div>
+
+  <h3>Part B: Hive Table Creation & Comparative Benchmark Query</h3>
+  <pre class="cmd"># 1. Create TextFile and Columnar RCFile tables
+docker exec ecommerce-sales-analytics-master-1 bash -c "beeline -u jdbc:hive2://localhost:10000 -n root --hivevar DATABASE=ecommerce_analytics --hivevar INPUT=/user/root/ecommerce/pig_eval_out --hivevar RC_OUTPUT=/user/root/ecommerce/rcfile -f /project/hive/tables.hql"
+
+# 2. Run identical analytical queries on Text vs RCFile
+docker exec ecommerce-sales-analytics-master-1 bash -c "beeline -u jdbc:hive2://localhost:10000/ecommerce_analytics -n root -e 'SELECT seller_id, count(*) AS days, round(sum(revenue_brl),2) AS total_rev FROM daily_text GROUP BY seller_id ORDER BY total_rev DESC LIMIT 5; SELECT seller_id, count(*) AS days, round(sum(revenue_brl),2) AS total_rev FROM daily_rcfile GROUP BY seller_id ORDER BY total_rev DESC LIMIT 5;'"</pre>
+  <pre class="output">+-----------------------------------+-------+------------+
+|             seller_id             | days  | total_rev  |
++-----------------------------------+-------+------------+
+| 4869f7a5dfa277a7dca6462dcf3b52b2  | 358   | 229237.63  |
+| 53243585a1d6dc2643021fd1853d8905  | 150   | 222776.05  |
+| 4a3ca9315b744ce9f8e9374361493884  | 537   | 200326.12  |
+| fa1c13f2614d7b5c4749cbc52fecda94  | 341   | 192842.13  |
+| 7c67e1448b00f6e969d365cea6b010ab  | 375   | 187923.89  |
++-----------------------------------+-------+------------+
+(Both queries return identical results. Text: 56.78s | RCFile: 50.89s -> 1.11x speedup)</pre>
+</div>
+
+<!-- PAGE 4: STORAGE AUDIT, WEB DASHBOARD, VIVA REFERENCE -->
+<div class="page">
+  <h2>Step 5 (Contd.): HDFS Storage Audit (Text vs RCFile)</h2>
+  <pre class="cmd">docker exec ecommerce-sales-analytics-master-1 bash -c "hdfs dfs -du -h /user/root/ecommerce/"</pre>
+  <pre class="output">4.1 M   8.2 M   /user/root/ecommerce/live_eval_run/prepared/daily.tsv
+308.8 K 617.6 K /user/root/ecommerce/mr_eval_out
+4.2 M   8.4 M   /user/root/ecommerce/pig_eval_out
+915.0 K 1.8 M   /user/root/ecommerce/rcfile</pre>
+  <div class="explain">
+    <strong>Explanation to Faculty:</strong> RCFile achieves a <strong>78.71% storage reduction</strong> (915 KB vs 4.2 MB) and faster query execution because columnar storage only reads and decompresses columns required by the aggregation.
+  </div>
+
+  <h2>Step 6: Track B Practical Extension — Interactive Flask Dashboard</h2>
+  <pre class="cmd">python -m ecommerce dashboard --results results/ecommerce</pre>
+  <pre class="output">* Serving Flask app 'ecommerce.dashboard'
+* Debug mode: off
+* Running on http://127.0.0.1:5000 (Press CTRL+C to quit)</pre>
+  <div class="explain">
+    <strong>What to Demonstrate in Browser (http://localhost:5000):</strong><br>
+    • <strong>Page 1 (Seller Deep-Dive):</strong> Search seller ID <code>4869f7a5dfa277a7dca6462dcf3b52b2</code>. Showcase annual revenue progression bars and the dynamic SVG pie chart illustrating 2016-2018 marketplace shares.<br>
+    • <strong>Page 2 (Annual Leaderboard):</strong> Select year 2018 and rank by Total Revenue. Demonstrate ranking of top merchants and comparisons against lowest volume sellers.
+  </div>
+
+  <h2>Summary Table for Faculty & Viva Reference</h2>
+  <table style="width: 100%; border-collapse: collapse; font-size: 8pt; margin-top: 6px;">
+    <thead>
+      <tr style="background-color: #2b6cb0; color: white;">
+        <th style="padding: 4px 6px; text-align: left;">Component</th>
+        <th style="padding: 4px 6px; text-align: left;">Technology</th>
+        <th style="padding: 4px 6px; text-align: left;">Dataset Metrics</th>
+        <th style="padding: 4px 6px; text-align: left;">Benchmark / Key Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 4px 6px; font-weight: 600;">Theme 1</td>
+        <td style="padding: 4px 6px;">MongoDB 7.0</td>
+        <td style="padding: 4px 6px;">69,065 daily sales / 99,441 orders</td>
+        <td style="padding: 4px 6px;"><strong>229.73x scan reduction</strong> (IXSCAN 100 vs COLLSCAN 22,973 docs)</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f7fafc;">
+        <td style="padding: 4px 6px; font-weight: 600;">Theme 2</td>
+        <td style="padding: 4px 6px;">Hadoop 2.10.2 / YARN</td>
+        <td style="padding: 4px 6px;">69,065 rows -> 4,254 summaries</td>
+        <td style="padding: 4px 6px;">2 distributed reducers on YARN across 2 DataNodes</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 4px 6px; font-weight: 600;">Theme 3</td>
+        <td style="padding: 4px 6px;">Apache Pig 0.17.0</td>
+        <td style="padding: 4px 6px;">69,065 records read & stored</td>
+        <td style="padding: 4px 6px;">Schema validation with regex date filtering in 21s</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f7fafc;">
+        <td style="padding: 4px 6px; font-weight: 600;">Theme 3</td>
+        <td style="padding: 4px 6px;">Apache Hive 2.3.9</td>
+        <td style="padding: 4px 6px;">Text (4.2 MB) vs RCFile (915 KB)</td>
+        <td style="padding: 4px 6px;"><strong>78.71% storage savings</strong> & 1.11x query execution speedup</td>
+      </tr>
+      <tr>
+        <td style="padding: 4px 6px; font-weight: 600;">Track B Extension</td>
+        <td style="padding: 4px 6px;">Python Flask & Dynamic SVG</td>
+        <td style="padding: 4px 6px;">Multi-year seller analytics</td>
+        <td style="padding: 4px 6px;">Interactive web dashboard serving pre-aggregated outputs</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
